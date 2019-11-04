@@ -1,0 +1,15 @@
+{
+  "name": "green-power",
+  "version": "1.0.0",
+  "description": "Web system for monitoring and handling electricity consumption.",
+  "main": "simulator.js",
+  "repository": "git@github.com:edvinnn/Green-Power.git",
+  "author": "edvinnn <sladic.edvin@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "mocha": "^6.2.2"
+  }
+}
