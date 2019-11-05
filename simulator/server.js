@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/GreenPowerDB');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('.api/routes/simulatorRoutes.js');
+var routes = require('./api/routes/simulatorRoutes');
 routes(app);
 
 
