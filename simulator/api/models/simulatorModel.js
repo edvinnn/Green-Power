@@ -12,4 +12,16 @@ var WindSchema = new Schema({
     }
 });
 
+var ConsumptionSchema = new Schema({
+    name: {
+        type: String,
+        required: 'Enter current energy consumption'
+    },
+    Create_date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 module.exports = mongoose.model('Wind', WindSchema);
+module.exports = mongoose.model('Consumption', ConsumptionSchema);
