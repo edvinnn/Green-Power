@@ -15,7 +15,7 @@ exports.create_wind = function(req, res) {
 };
 
 exports.get_wind = function(req, res) {
-    //res.json(simulator.getRandomWind());
+    res.json(simulator.currentWind(10))
 };
 
 exports.get_consumption = function(req, res) {
