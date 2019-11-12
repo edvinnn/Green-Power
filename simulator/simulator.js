@@ -1,3 +1,5 @@
+'use strict';
+
 exports.currentWind = function(v) {
     var wind = v*2;
     var r = 0;
