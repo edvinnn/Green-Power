@@ -18,6 +18,10 @@ exports.get_wind = function(req, res) {
     res.json(simulator.currentWind(10))
 };
 
+exports.get_currentprice = function(req, res) {
+    res.json(simulator.currentPrice())
+};
+
 exports.get_consumption = function(req, res) {
     res.json(simulator.getRandomConsumption(1, 35));
 };

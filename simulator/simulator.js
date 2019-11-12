@@ -13,3 +13,7 @@ exports.getRandomConsumption = function(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+exports.currentPrice = function(min, max) {
+    return 5 //TODO: Return actuall value
+};
