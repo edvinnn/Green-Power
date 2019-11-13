@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const windSchema = new mongoose.Schema({
     wind: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
       }
 });
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Wind = require('./model')
 
 // Connect to database
 mongoose.connect('mongodb://localhost/GreenPowerDB', { useNewUrlParser: true })
@@ -7,19 +8,29 @@ db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('simulator connected to database'))
 
 currentWind = function() {
-    var Wind = mongoose.model('Wind', windSchema);
-    Wind.findOne('wind', function (err, wind) {
-        if (err) return handleError(err);
-        console.log(wind.wind);
-    });
+    // fetch previous value
+    Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
+        //console.log(wind[0].wind)
     
-    var wind = v*2;
-    var r = 0;
-    const iterations = 50;
-    for(var i = iterations; i > 0; i--){
-        r += Math.random()*wind;
-    }
-    return r / iterations;
+        // create new wind
+        var t = wind[0].wind*2;
+        var r = 0;
+        const iterations = 50;
+        for(var i = iterations; i > 0; i--){
+            r += Math.random()*t;
+        }
+        t = r / iterations;
+
+        // save new wind to db
+        var newWind = new Wind({
+            wind: t
+        })
+        newWind.save(function(err){
+            if (err){
+                console.log(err)
+            }
+        });
+    })
 };
 
 getRandomConsumption = function(min, max) {
@@ -41,7 +52,5 @@ windSimulator = function() {
 // Loops and updates databse with new winds
 exports.run = async function() {
     console.log('I am started!')
-    //while (true) {
-    //    setTimeout(currentWind, 10000)
-    //}
+    setInterval(currentWind, 3000)
 };
