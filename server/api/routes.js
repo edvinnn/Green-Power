@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Wind = require('./model')
+const Wind = require('./../model')
 
 // Get all winds
 router.get('/wind', async (req, res) => {
