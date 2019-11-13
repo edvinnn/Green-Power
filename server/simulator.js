@@ -10,20 +10,20 @@ db.once('open', () => console.log('simulator connected to database'))
 currentWind = function() {
     // fetch previous value
     Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
-        //console.log(wind[0].wind)
+        console.log(wind[0].wind)
     
         // create new wind
-        var t = wind[0].wind*2;
-        var r = 0;
-        const iterations = 50;
+        let db_wind = (wind[0].wind)
+        let new_wind = 0;
+        const iterations = 5;
         for(var i = iterations; i > 0; i--){
-            r += Math.random()*t;
+            new_wind += (Math.random()+0.5)*db_wind;
         }
-        t = r / iterations;
+        new_wind = new_wind / iterations;
 
         // save new wind to db
         var newWind = new Wind({
-            wind: t
+            wind: new_wind
         })
         newWind.save(function(err){
             if (err){
@@ -33,24 +33,7 @@ currentWind = function() {
     })
 };
 
-getRandomConsumption = function(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-currentPrice = function(min, max) {
-    return 5 //TODO: Return actuall value
-};
-
-windSimulator = function() {
-    while (true) {
-        setTimeout(generateWind, 10000)
-    }
-};
-
 // Loops and updates databse with new winds
 exports.run = async function() {
-    console.log('I am started!')
-    setInterval(currentWind, 3000)
+    setInterval(currentWind, 1000)
 };
