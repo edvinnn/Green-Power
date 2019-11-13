@@ -3,7 +3,8 @@
 var express = require('express'),
     app = express(),
     port = process.env.PORT || 3000;
-    mongoose = require('mongoose'),
+
+const mongoose = require('mongoose'),
     Wind = require('./api/models/simulatorModel'),
     bodyParser = require('body-parser');
 
@@ -19,4 +20,4 @@ routes(app);
 
 
 app.listen(port);
-console.log('todo list RESTful API server started on: ' + port);
+console.log('RESTful API server started on: ' + port);
