@@ -18,7 +18,6 @@ router.put('/prosumer/:id/consumption', async (req, res) => {
     })
 })
 
-
 router.get('/wind', async (req, res) => {
     try {
         const winds = await Model.Wind.find()
@@ -75,6 +74,7 @@ router.get('/consumption', async (req, res) => {
 // Get latest consumption
 router.get('/consumption/latest', (req, res) => {
     Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+
         try {
             res.status(200).json({consumption})
         } catch (err) {
@@ -87,6 +87,7 @@ router.get('/consumption/latest', (req, res) => {
 // Create new consumption
 router.post('/consumption', async (req, res) => {
     const consumption = new Model.Consumer({
+
         consumption: req.body.consumption
     })
 

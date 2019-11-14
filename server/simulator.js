@@ -38,6 +38,7 @@ currentConsumption = function() {
     Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
         console.log("total consumer consumption: " + consumption[0].consumption + "kWh")
 
+
         // create new consumption
         let db_consumption = (consumption[0].consumption)
         let new_consumption = 0;
