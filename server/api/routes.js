@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
 // Create new wind
 router.post('/wind', async (req, res) => {
     const wind = new Wind({
-        wind: req.body.speed
+        wind: req.body.wind
     })
 
     try {
