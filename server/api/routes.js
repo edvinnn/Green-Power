@@ -2,8 +2,22 @@ const express = require('express')
 const router = express.Router()
 const Model = require('./../model')
 
-// Put prosumer consumption
-router.put('/prosumer')
+//Update specific prosumer's consumption
+router.put('/prosumer/:id/consumption', async (req, res) => {
+
+    Model.Prosumer.findOneAndUpdate({"_id": req.params.id}, {"consumption":req.body.consumption}, function (err, u) {
+        try{
+            if(u == null){
+                res.status(404).send()
+            } else{
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    })
+})
+
 
 router.get('/wind', async (req, res) => {
     try {
