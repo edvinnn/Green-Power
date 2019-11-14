@@ -24,7 +24,6 @@ const prosumerSchema = new mongoose.Schema({
     }
 });
 
-
 let Wind = mongoose.model('Wind', windSchema);
 let Consumer = mongoose.model('Consumer', consumerSchema);
 let Prosumer = mongoose.model('Prosumer', prosumerSchema);
