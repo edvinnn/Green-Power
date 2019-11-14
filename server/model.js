@@ -8,7 +8,15 @@ const windSchema = new mongoose.Schema({
     }
 });
 
-const consumptionSchema = new mongoose.Schema({
+const consumerSchema = new mongoose.Schema({
+    consumption: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+});
+
+const prosumerSchema = new mongoose.Schema({
     consumption: {
         type: Number,
         required: true,
@@ -18,9 +26,11 @@ const consumptionSchema = new mongoose.Schema({
 
 
 let Wind = mongoose.model('Wind', windSchema);
-let Consumption = mongoose.model('Consumption', consumptionSchema);
+let Consumer = mongoose.model('Consumer', consumerSchema);
+let Prosumer = mongoose.model('Prosumer', prosumerSchema);
 
 module.exports = {
     Wind: Wind,
-    Consumption: Consumption
+    Consumer: Consumer,
+    Prosumer: Prosumer
 }
