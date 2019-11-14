@@ -82,8 +82,22 @@ router.post('/consumer/consumption', async (req, res) => {
 })
 
 // Returns the total of all prosumers consumption
-router.get('/prosumer/consumption'), async (req, res) => {
+router.get('/prosumer/consumption', async (req, res) => {
+    try {
+        Model.Prosumer.find().exec(function(err, consumption){
+
+            let total_consumption = 0
     
-}
+            consumption.forEach(element => {
+                total_consumption += element.consumption
+                console.log(element.consumption)
+            });
+    
+            res.status(200).json(total_consumption)
+        })
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+})
 
 module.exports = router
