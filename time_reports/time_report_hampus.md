@@ -11,3 +11,4 @@
 | 2019-11-13  | 4       | Further work with api for gathering specific data to server from mongodb. |
 | 2019-11-14  | 1       | Updated simulator for households consumptions. |
 | 2019-11-14  | 3       | Work progress for API for specific prosumer to update its consumption in DB. |
+| 2019-11-14  | 1       | Watched tutorials on how to apply microservices in order to keep the architecture clean. |
