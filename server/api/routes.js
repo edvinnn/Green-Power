@@ -13,7 +13,15 @@ router.get('/wind', async (req, res) => {
 })
 
 // Get one wind
-router.get('/:id', (req, res) => {
+router.get('/wind/latest', (req, res) => {
+    Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
+        try {
+            res.status(200).json({wind})
+        } catch (err) {
+            console.log(err)
+            res.status(500)
+        }
+    })
 })
 
 // Create new wind
