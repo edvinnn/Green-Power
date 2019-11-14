@@ -35,7 +35,7 @@ currentWind = function() {
 
 currentConsumption = function() {
     // fetch previous value
-    Model.Consumption.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+    Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
         console.log("consumption: " + consumption[0].consumption)
 
         // create new consumption
@@ -48,7 +48,7 @@ currentConsumption = function() {
         new_consumption = new_consumption / iterations;
 
         // save new wind to db
-        var newConsumption = new Model.Consumption({
+        var newConsumption = new Model.Consumer({
             consumption: new_consumption
         })
         newConsumption.save(function(err){
