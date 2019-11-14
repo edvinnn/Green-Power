@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const Wind = require('./../model')
+const Model = require('./../model')
 
 // Get all winds
 router.get('/wind', async (req, res) => {
     try {
-        const winds = await Wind.find()
+        const winds = await Model.Wind.find()
         res.json(winds)
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -14,7 +14,7 @@ router.get('/wind', async (req, res) => {
 
 // Get one wind
 router.get('/wind/latest', (req, res) => {
-    Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
+    Model.Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
         try {
             res.status(200).json({wind})
         } catch (err) {
@@ -26,7 +26,7 @@ router.get('/wind/latest', (req, res) => {
 
 // Create new wind
 router.post('/wind', async (req, res) => {
-    const wind = new Wind({
+    const wind = new Model.Wind({
         wind: req.body.wind
     })
 
@@ -44,6 +44,42 @@ router.patch('/:id', (req, res) => {
 
 // Delete one wind
 router.delete('/:id', (req, res) => {
+})
+
+// Get all consumer consumptions
+router.get('/consumption', async (req, res) => {
+    try {
+        const consumptions = await Model.Consumption.find()
+        res.json(consumptions)
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
+// Get latest consumption
+router.get('/consumption/latest', (req, res) => {
+    Model.Consumption.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+        try {
+            res.status(200).json({consumption})
+        } catch (err) {
+            console.log(err)
+            res.status(500)
+        }
+    })
+})
+
+// Create new consumption
+router.post('/consumption', async (req, res) => {
+    const consumption = new Model.Consumption({
+        consumption: req.body.consumption
+    })
+
+    try {
+        const newConsumption = await consumption.save()
+        res.status(201).json(newConsumption)
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
 })
 
 module.exports = router
