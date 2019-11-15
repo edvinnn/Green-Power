@@ -11,3 +11,4 @@
 | 2019-11-12  | 2       | Work progress with simulator and for wind, demand and price. Basically trying to build a model by hand before implementing. |
 | 2019-11-13  | 5       | Worked on simulator, rest and understading Javascript/Node |
 | 2019-11-14  | 4       | Worked on API |
+| 2019-11-15  | 2       | Worked on Simulator |
