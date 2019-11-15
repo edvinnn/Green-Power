@@ -2,7 +2,22 @@ const express = require('express')
 const router = express.Router()
 const Model = require('./../model')
 
-// Get all winds
+//Update specific prosumer's consumption
+router.put('/prosumer/:id/consumption', async (req, res) => {
+
+    Model.Prosumer.findOneAndUpdate({"_id": req.params.id}, {"consumption":req.body.consumption}, function (err, u) {
+        try{
+            if(u == null){
+                res.status(404).send()
+            } else{
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    })
+})
+
 router.get('/wind', async (req, res) => {
     try {
         const winds = await Model.Wind.find()
@@ -49,7 +64,7 @@ router.delete('/:id', (req, res) => {
 // Get all consumer consumptions
 router.get('/consumption', async (req, res) => {
     try {
-        const consumptions = await Model.Consumption.find()
+        const consumptions = await Model.Consumer.find()
         res.json(consumptions)
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -58,7 +73,8 @@ router.get('/consumption', async (req, res) => {
 
 // Get latest consumption
 router.get('/consumption/latest', (req, res) => {
-    Model.Consumption.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+    Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+
         try {
             res.status(200).json({consumption})
         } catch (err) {
@@ -70,7 +86,8 @@ router.get('/consumption/latest', (req, res) => {
 
 // Create new consumption
 router.post('/consumption', async (req, res) => {
-    const consumption = new Model.Consumption({
+    const consumption = new Model.Consumer({
+
         consumption: req.body.consumption
     })
 

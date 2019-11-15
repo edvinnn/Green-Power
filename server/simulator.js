@@ -10,7 +10,7 @@ db.once('open', () => console.log('simulator connected to database'))
 currentWind = function() {
     // fetch previous value
     Model.Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
-        console.log("wind: " + wind[0].wind)
+        console.log("wind speed: " + wind[0].wind + "m/s")
 
         // create new wind
         let db_wind = (wind[0].wind)
@@ -35,8 +35,9 @@ currentWind = function() {
 
 currentConsumption = function() {
     // fetch previous value
-    Model.Consumption.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
-        console.log("consumption: " + consumption[0].consumption)
+    Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
+        console.log("total consumer consumption: " + consumption[0].consumption + "kWh")
+
 
         // create new consumption
         let db_consumption = (consumption[0].consumption)
@@ -48,7 +49,7 @@ currentConsumption = function() {
         new_consumption = new_consumption / iterations;
 
         // save new wind to db
-        var newConsumption = new Model.Consumption({
+        var newConsumption = new Model.Consumer({
             consumption: new_consumption
         })
         newConsumption.save(function(err){
