@@ -62,7 +62,7 @@ router.delete('/:id', (req, res) => {
 })
 
 // Get all consumer consumptions
-router.get('/consumption', async (req, res) => {
+router.get('/consumer/consumption', async (req, res) => {
     try {
         const consumptions = await Model.Consumer.find()
         res.json(consumptions)
@@ -72,9 +72,8 @@ router.get('/consumption', async (req, res) => {
 })
 
 // Get latest consumption
-router.get('/consumption/latest', (req, res) => {
+router.get('/consumer/consumption/latest', (req, res) => {
     Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
-
         try {
             res.status(200).json({consumption})
         } catch (err) {
@@ -85,9 +84,8 @@ router.get('/consumption/latest', (req, res) => {
 })
 
 // Create new consumption
-router.post('/consumption', async (req, res) => {
+router.post('/consumer/consumption', async (req, res) => {
     const consumption = new Model.Consumer({
-
         consumption: req.body.consumption
     })
 
@@ -96,6 +94,25 @@ router.post('/consumption', async (req, res) => {
         res.status(201).json(newConsumption)
     } catch (err) {
         res.status(400).json({message: err.message})
+    }
+})
+
+// Returns the total of all prosumers consumption
+router.get('/prosumer/consumption', async (req, res) => {
+    try {
+        Model.Prosumer.find().exec(function(err, consumption){
+
+            let total_consumption = 0
+    
+            consumption.forEach(element => {
+                total_consumption += element.consumption
+                console.log(element.consumption)
+            });
+    
+            res.status(200).json(total_consumption)
+        })
+    } catch (err) {
+        res.status(500).json({message: err.message})
     }
 })
 
