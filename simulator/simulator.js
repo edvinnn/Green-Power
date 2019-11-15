@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
 const Model = require('./model')
 
+const express = require('express')
+const app = express()
+app.use(express.json())
+
 // Connect to database
-mongoose.connect('mongodb://localhost/GreenPowerDB', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/SimulatorDB', { useNewUrlParser: true })
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('simulator connected to database'))
@@ -61,7 +65,16 @@ currentConsumption = function() {
 };
 
 // Loops and updates database with new winds
-exports.run = async function() {
+run = async function() {
     setInterval(currentWind, 1000)
     setInterval(currentConsumption, 1000)
 };
+
+// Setup routes
+const routes = require('./api/routes')
+app.use('/api', routes)
+
+// Start simulator
+run()
+
+app.listen(3001, () => console.log('server started'))

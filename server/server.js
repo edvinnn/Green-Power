@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const simulator = require('./simulator')
 
 app.use(express.json())
 
@@ -14,8 +13,5 @@ db.once('open', () => console.log('server connected to database'))
 // Setup routes
 const routes = require('./api/routes')
 app.use('/api', routes)
-
-// Start simulator
-simulator.run()
 
 app.listen(3000, () => console.log('server started'))
