@@ -3,6 +3,8 @@ const app = express()
 const mongoose = require('mongoose')
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.set('view-engine', 'ejs')
 
 // Connect to database
 mongoose.connect('mongodb://localhost/GreenPowerDB', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -15,6 +17,5 @@ const api_routes = require('./api/routes')
 const web_routes = require('./website/routes')
 app.use('/api', api_routes)
 app.use('/', web_routes)
-app.set('view-engine', 'ejs')
 
 app.listen(3000, () => console.log('server started'))
