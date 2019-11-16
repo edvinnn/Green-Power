@@ -1,0 +1,15 @@
+const mongoose = require('mongoose');
+
+const prosumerSchema = new mongoose.Schema({
+    consumption: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+});
+
+let Prosumer = mongoose.model('Prosumer', prosumerSchema);
+
+module.exports = {
+    Prosumer: Prosumer
+}
