@@ -7,14 +7,20 @@
   "author": "edvinnn <sladic.edvin@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "devStartServer": "nodemon server/server.js",
+    "devStartSim": "nodemon simulator/simulator.js",
     "test": "mocha"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "ejs": "^2.7.2",
     "express": "^4.17.1",
     "mocha": "^6.2.2",
     "mongodb": "^3.3.3",
-    "mongoose": "^5.7.7",
+    "mongoose": "^5.7.7"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
     "nodemon": "^1.19.4"
   }
 }
