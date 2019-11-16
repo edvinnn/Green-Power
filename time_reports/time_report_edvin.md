@@ -12,3 +12,4 @@
 | 2019-11-13  | 5       | Worked on simulator, rest and understading Javascript/Node |
 | 2019-11-14  | 4       | Worked on API |
 | 2019-11-15  | 2       | Worked on Simulator |
+| 2019-11-16  | 3       | Register user |
