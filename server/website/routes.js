@@ -2,19 +2,24 @@ const express = require('express')
 const router = express.Router()
 const Model = require('./../model')
 const bcrypt = require('bcrypt')
+const passport = require('passport')
 
 router.get('/', async (req, res) => {
-    res.render('index.ejs', {name: 'Edvin & Hampus'})
+    res.render('index.ejs', {name: 'Hello, world!'})
 })
 
-router.get('/login', async (req, res) => {
+router.get('/profile', checkAuth, async (req, res) => {
+    console.log(req.user)
+    res.render('index.ejs', {name: req.user.name})
+})
+
+router.get('/login', checkNotAuth, async (req, res) => {
     res.render('login.ejs')
 })
 
-router.post('/login', async (req, res) => {
-})
+router.post('/login', passport.authenticate('local', {successRedirect: '/profile', failureRedirect: '/login', failureFlash: true}))
 
-router.get('/register', async (req, res) => {
+router.get('/register', checkNotAuth, async (req, res) => {
     res.render('register.ejs')
 })
 
@@ -35,5 +40,24 @@ router.post('/register', async (req, res) => {
         res.status(500)
     }
 })
+
+router.get('/logout', checkAuth, (req, res) => {
+    req.logOut()
+    res.redirect('/')
+})
+
+function checkAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('/login')
+}
+
+function checkNotAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    next()
+}
 
 module.exports = router
