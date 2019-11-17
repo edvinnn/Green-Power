@@ -13,3 +13,4 @@
 | 2019-11-14  | 4       | Worked on API |
 | 2019-11-15  | 2       | Worked on Simulator |
 | 2019-11-16  | 3       | Register user |
+| 2019-11-17  | 3       | Worked on implementing libs/functionality to handle sessions and sign in and out users |
