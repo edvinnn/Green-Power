@@ -85,10 +85,13 @@ currentPrice = function(){
     }
 
     // Simple linear function for price based on demand
-    let consumption_per_household = last_consumption / households
+    let max_consumption_price = 60
     let min_demand_price = 10
+    let consumption_per_household = last_consumption / households
     let demand_price = 0
-    if(consumption_per_household < min_demand_price){
+    if(consumption_per_household > max_consumption_price){
+        demand_price = max_consumption_price
+    } else if(consumption_per_household < min_demand_price){
         demand_price = min_demand_price
     } else {
         demand_price = consumption_per_household
