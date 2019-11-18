@@ -64,6 +64,34 @@ currentConsumption = function() {
     })
 };
 
+currentPrice = function(){
+    return new Promise(resolve => {
+        // Simple linear function for price based on wind
+        let max_wind = 50
+        let min_wind_price = 10
+        let wind_price = 0
+        if(last_wind > max_wind){
+            wind_price = min_wind_price
+        } else{
+            wind_price = -(last_wind - max_wind) + min_wind_price
+        }
+
+        // Simple linear function for price based on demand
+        let min_demand_price = 10
+        let demand_price = 0
+        if(last_consumption < min_demand_price){
+            demand_price = min_demand_price
+        } else {
+            demand_price = (last_consumption / 100) + min_demand_price
+        }
+
+        const current_price = wind_price + demand_price
+        //console.log("wind price: " + wind_price)
+        //console.log("demand price: " + demand_price)
+        console.log("Price: " + current_price)
+    })
+}
+
 // Loops and updates database with new winds
 run = async function() {
     setInterval(currentWind, 1000)
