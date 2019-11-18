@@ -10,6 +10,9 @@ db.once('open', () => console.log('simulator/simulator connected to database'))
 let last_wind = 0;
 let last_consumption = 0;
 
+// Number of consumers (households) within the system
+let households = 1000;
+
 currentWind = async function() {
     // fetch previous value
     const wind = await Model.Wind.find().sort({_id:-1}).limit(1).exec()
@@ -74,16 +77,20 @@ currentPrice = function(){
     }
 
     // Simple linear function for price based on demand
+    let max_consumption_price = 60
     let min_demand_price = 10
+    let consumption_per_household = last_consumption / households
     let demand_price = 0
-    if(last_consumption < min_demand_price){
+    if(consumption_per_household > max_consumption_price){
+        demand_price = max_consumption_price
+    } else if(consumption_per_household < min_demand_price){
         demand_price = min_demand_price
     } else {
-        demand_price = (last_consumption / 100) + min_demand_price
+        demand_price = consumption_per_household
     }
 
     const current_price = wind_price + demand_price
-    console.log("Price: " + current_price)
+    console.log("current price: " + current_price + "kr/kWh")
 }
 
 // Loops and updates database with new winds
