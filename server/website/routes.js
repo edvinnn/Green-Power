@@ -9,7 +9,6 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
-    console.log(req.user)
     res.render('index.ejs', {name: req.user.name})
 })
 
