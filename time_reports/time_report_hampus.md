@@ -13,3 +13,4 @@
 | 2019-11-14  | 3       | Work progress for API for specific prosumer to update its consumption in DB. |
 | 2019-11-14  | 1       | Watched tutorials on how to apply microservices in order to keep the architecture clean. |
 | 2019-11-15  | 1       | Refactored the project and split up server to one separate module for the simulator. |
+| 2019-11-18  | 5       | Introduced current price to the simulator based on the last wind and demand, had some problems on how to run it asynchronously based on the last wind and demand but it worked out in the end. |
