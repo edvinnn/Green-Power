@@ -6,10 +6,13 @@ const app = express()
 app.use(express.json())
 
 // Connect to database
-mongoose.connect('mongodb://localhost/SimulatorDB', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/SimulatorDB', { useNewUrlParser: true, useUnifiedTopology: true})
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('simulator connected to database'))
+
+let last_wind = 0;
+let last_consumption = 0;
 
 currentWind = function() {
     // fetch previous value
@@ -33,6 +36,7 @@ currentWind = function() {
             if (err){
                 console.log(err)
             }
+            last_wind = new_wind
         });
     })
 };
@@ -60,6 +64,7 @@ currentConsumption = function() {
             if (err){
                 console.log(err)
             }
+            last_consumption = new_consumption
         });
     })
 };
