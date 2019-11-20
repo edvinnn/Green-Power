@@ -16,10 +16,20 @@ const consumerSchema = new mongoose.Schema({
     }
 });
 
-let Wind = mongoose.model('Wind', windSchema);
-let Consumer = mongoose.model('Consumer', consumerSchema);
+const priceSchema = new mongoose.Schema({
+    price: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+})
+
+let Wind = mongoose.model('Wind', windSchema, 'winds');
+let Consumer = mongoose.model('Consumer', consumerSchema, 'consumers');
+let Price = mongoose.model('Price', priceSchema, 'prices')
 
 module.exports = {
     Wind: Wind,
-    Consumer: Consumer
+    Consumer: Consumer,
+    Price: Price
 }
