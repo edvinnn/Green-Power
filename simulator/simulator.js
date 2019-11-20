@@ -27,7 +27,6 @@ currentWind = async function() {
 
     await sim_db_utils.updateWind(new_wind)
     last_wind = new_wind
-
     console.log("wind speed: " + new_wind + " m/s")
 
 };
