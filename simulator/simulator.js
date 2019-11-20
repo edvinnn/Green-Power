@@ -16,7 +16,6 @@ let households = 1000;
 currentWind = async function() {
     // fetch previous value
     const wind = await Model.Wind.find().sort({_id:-1}).limit(1).exec()
-    console.log("wind speed: " + wind[0].wind + "m/s")
 
     // create new wind
     let db_wind = (wind[0].wind)
@@ -37,12 +36,14 @@ currentWind = async function() {
         }
         last_wind = new_wind
     });
+
+    console.log("wind speed: " + new_wind + " m/s")
+
 };
 
 currentConsumption = async function() {
     // fetch previous value
     const consumption = await Model.Consumer.find().sort({_id:-1}).limit(1).exec()
-    console.log("total consumer consumption: " + consumption[0].consumption + "kWh")
 
     // create new consumption
     let db_consumption = (consumption[0].consumption)
@@ -63,9 +64,12 @@ currentConsumption = async function() {
         }
         last_consumption = new_consumption
     });
+
+    console.log("total consumer consumption: " + new_consumption + " kWh")
 };
 
-currentPrice = function(){
+currentPrice = async function(){
+
     // Simple linear function for price based on wind
     let max_wind = 50
     let min_wind_price = 10
@@ -90,7 +94,17 @@ currentPrice = function(){
     }
 
     const current_price = wind_price + demand_price
-    console.log("current price: " + current_price + "kr/kWh")
+    const newPrice = new Model.Price({
+        price: current_price
+    })
+    newPrice.save(function (err) {
+        if(err){
+            console.log(err)
+        }
+    })
+
+    console.log("current price: " + current_price + " kr/kWh")
+
 }
 
 // Loops and updates database with new winds
