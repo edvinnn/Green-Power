@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
-const Model = require('./model')
+// const mongoose = require('mongoose')
+// const Model = require('./model')
+const sim_db_utils = require('./sim_db_utils')
 
-// Connect to database
-mongoose.connect('mongodb://localhost/SimulatorDB', { useNewUrlParser: true, useUnifiedTopology: true})
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('simulator/simulator connected to database'))
+// mongoose.connect(process.env.SIMULATOR_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true})
+// const db = mongoose.connection
+// db.on('error', (error) => console.error(error))
+// db.once('open', () => console.log('simulator/simulator connected to simulator database'))
 
 let last_wind = 0;
 let last_consumption = 0;
@@ -15,10 +15,9 @@ let households = 1000;
 
 currentWind = async function() {
     // fetch previous value
-    const wind = await Model.Wind.find().sort({_id:-1}).limit(1).exec()
+    let db_wind = await sim_db_utils.getLatestWind()
 
-    // create new wind
-    let db_wind = (wind[0].wind)
+    // create new wind based on previous wind
     let new_wind = 0;
     const iterations = 5;
     for(var i = iterations; i > 0; i--){
@@ -26,27 +25,17 @@ currentWind = async function() {
     }
     new_wind = new_wind / iterations;
 
-    // save new wind to db
-    var newWind = new Model.Wind({
-        wind: new_wind
-    })
-    newWind.save(function(err){
-        if (err){
-            console.log(err)
-        }
-        last_wind = new_wind
-    });
-
+    await sim_db_utils.updateWind(new_wind)
+    last_wind = new_wind
     console.log("wind speed: " + new_wind + " m/s")
 
 };
 
 currentConsumption = async function() {
     // fetch previous value
-    const consumption = await Model.Consumer.find().sort({_id:-1}).limit(1).exec()
+    const db_consumption = await sim_db_utils.getLatestConsumption()
 
-    // create new consumption
-    let db_consumption = (consumption[0].consumption)
+    // create new consumption based on previous consumption
     let new_consumption = 0;
     const iterations = 5;
     for(var i = iterations; i > 0; i--){
@@ -54,16 +43,8 @@ currentConsumption = async function() {
     }
     new_consumption = new_consumption / iterations;
 
-    // save new wind to db
-    var newConsumption = new Model.Consumer({
-        consumption: new_consumption
-    })
-    newConsumption.save(function(err){
-        if (err){
-            console.log(err)
-        }
-        last_consumption = new_consumption
-    });
+    sim_db_utils.updateConsumption(new_consumption)
+    last_consumption = new_consumption
 
     console.log("total consumer consumption: " + new_consumption + " kWh")
 };
@@ -94,20 +75,13 @@ currentPrice = async function(){
     }
 
     const current_price = wind_price + demand_price
-    const newPrice = new Model.Price({
-        price: current_price
-    })
-    newPrice.save(function (err) {
-        if(err){
-            console.log(err)
-        }
-    })
+
+    sim_db_utils.updatePrice(current_price)
 
     console.log("current price: " + current_price + " kr/kWh")
-
 }
 
-// Loops and updates database with new winds
+//Loops and updates database with new winds
 async function run() {
     setInterval(async function(){
         await currentWind()

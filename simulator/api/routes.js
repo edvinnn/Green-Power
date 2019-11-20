@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const Model = require('./../model')
+const sim_db_utils = require('../sim_db_utils')
 
 // Get 20 latest winds
 router.get('/wind', async (req, res) => {
     try {
-        const winds = await Model.Wind.find().sort({_id:-1}).limit(20)
+        const winds = await sim_db_utils.getLatestWinds(20)
         res.status(200).json(winds)
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -13,25 +13,22 @@ router.get('/wind', async (req, res) => {
 })
 
 // Get latest wind
-router.get('/wind/latest', (req, res) => {
-    Model.Wind.find().sort({_id:-1}).limit(1).exec(function(err, wind){
-        try {
-            res.status(200).json({wind})
-        } catch (err) {
-            console.log(err)
-            res.status(500)
-        }
-    })
+router.get('/wind/latest', async (req, res) => {
+    try {
+        const wind = await sim_db_utils.getLatestWind()
+        res.status(200).json({wind})
+    } catch (err) {
+        console.log(err)
+        res.status(500)
+    }
 })
 
 // Create new wind
 router.post('/wind', async (req, res) => {
-    const wind = new Model.Wind({
-        wind: req.body.wind
-    })
     try {
-        const newWind = await wind.save()
-        res.status(201).json(newWind)
+        await sim_db_utils.updateWind(req.body.wind)
+        const wind = await sim_db_utils.getLatestWind()
+        res.status(201).json(wind)
     } catch (err) {
         res.status(400).json({message: err.message})
     }
@@ -40,7 +37,7 @@ router.post('/wind', async (req, res) => {
 // Get 20 latest consumer consumptions
 router.get('/consumer/consumption', async (req, res) => {
     try {
-        const consumptions = await Model.Consumer.find().sort({_id:-1}).limit(20)
+        const consumptions = await sim_db_utils.getLatestConsumptions(20)
         res.status(200).json(consumptions)
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -48,25 +45,22 @@ router.get('/consumer/consumption', async (req, res) => {
 })
 
 // Get latest consumption
-router.get('/consumer/consumption/latest', (req, res) => {
-    Model.Consumer.find().sort({_id:-1}).limit(1).exec(function(err, consumption){
-        try {
-            res.status(200).json({consumption})
-        } catch (err) {
-            console.log(err)
-            res.status(500)
-        }
-    })
+router.get('/consumer/consumption/latest',async (req, res) => {
+    try {
+        const consumption = await sim_db_utils.getLatestConsumption()
+        res.status(200).json({consumption})
+    } catch (err) {
+        console.log(err)
+        res.status(500)
+    }
 })
 
 // Create new consumption
 router.post('/consumer/consumption', async (req, res) => {
-    const consumption = new Model.Consumer({
-        consumption: req.body.consumption
-    })
     try {
-        const newConsumption = await consumption.save()
-        res.status(201).json(newConsumption)
+        await sim_db_utils.updateConsumption(req.body.consumption)
+        const consumption = await sim_db_utils.getLatestConsumption()
+        res.status(201).json(consumption)
     } catch (err) {
         res.status(400).json({message: err.message})
     }
@@ -75,7 +69,7 @@ router.post('/consumer/consumption', async (req, res) => {
 // Get 20 latest prices
 router.get('/price', async (req, res) => {
     try {
-        const prices = await Model.Price.find().sort({_id:-1}).limit(20)
+        const prices = await sim_db_utils.getLatestPrices(20)
         res.status(200).json(prices)
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -83,15 +77,14 @@ router.get('/price', async (req, res) => {
 })
 
 // Get latest price
-router.get('/price/latest', (req, res) => {
-    Model.Price.find().sort({_id:-1}).limit(1).exec(function(err, price){
-        try {
-            res.status(200).json({price})
-        } catch (err) {
-            console.log(err)
-            res.status(500)
-        }
-    })
+router.get('/price/latest', async (req, res) => {
+    try {
+        const price = await sim_db_utils.getLatestPrice()
+        res.status(200).json({price})
+    } catch (err) {
+        console.log(err)
+        res.status(500)
+    }
 })
 
 module.exports = router
