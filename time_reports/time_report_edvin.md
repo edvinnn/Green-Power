@@ -9,3 +9,10 @@
 | 2019-11-05  | 4       | Started to build the RESTful API (model, controller, routes). Also created a first simulator of wind speed and household electric consumption. |
 | 2019-11-05  | 1       | Updated time report to appropriate model. |
 | 2019-11-12  | 2       | Work progress with simulator and for wind, demand and price. Basically trying to build a model by hand before implementing. |
+| 2019-11-13  | 5       | Worked on simulator, rest and understading Javascript/Node |
+| 2019-11-14  | 4       | Worked on API |
+| 2019-11-15  | 2       | Worked on Simulator |
+| 2019-11-16  | 3       | Register user |
+| 2019-11-17  | 3       | Worked on implementing libs/functionality to handle sessions and sign in and out users |
+| 2019-11-18  | 5       | Fixing bugs (basically understanding promisses and javascript) |
+| 2019-11-20  | 9       | Fixing multiple database connections, and started working on frontend design |

@@ -1,20 +1,14 @@
-var express = require('express'),
-    app = express(),
-    port = process.env.PORT || 3000;
-    mongoose = require('mongoose'),
-    Wind = require('./api/models/simulatorModel'),
-    bodyParser = require('body-parser');
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+const express = require('express')
+require('./simulator')
 
-// mongoose instance connection
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/GreenPowerDB');
+const app = express()
+app.use(express.json())
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Setup routes
+const routes = require('./api/routes')
+app.use('/api', routes)
 
-var routes = require('./api/routes/simulatorRoutes');
-routes(app);
-
-
-app.listen(port);
-console.log('todo list RESTful API server started on: ' + port);
+app.listen(5000, () => console.log('simulator server started'))
