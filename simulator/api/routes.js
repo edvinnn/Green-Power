@@ -6,7 +6,7 @@ const Model = require('./../model')
 router.get('/wind', async (req, res) => {
     try {
         const winds = await Model.Wind.find().sort({_id:-1}).limit(20)
-        res.json(winds)
+        res.status(200).json(winds)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -29,7 +29,6 @@ router.post('/wind', async (req, res) => {
     const wind = new Model.Wind({
         wind: req.body.wind
     })
-
     try {
         const newWind = await wind.save()
         res.status(201).json(newWind)
@@ -42,7 +41,7 @@ router.post('/wind', async (req, res) => {
 router.get('/consumer/consumption', async (req, res) => {
     try {
         const consumptions = await Model.Consumer.find().sort({_id:-1}).limit(20)
-        res.json(consumptions)
+        res.status(200).json(consumptions)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -65,7 +64,6 @@ router.post('/consumer/consumption', async (req, res) => {
     const consumption = new Model.Consumer({
         consumption: req.body.consumption
     })
-
     try {
         const newConsumption = await consumption.save()
         res.status(201).json(newConsumption)
@@ -78,7 +76,7 @@ router.post('/consumer/consumption', async (req, res) => {
 router.get('/price', async (req, res) => {
     try {
         const prices = await Model.Price.find().sort({_id:-1}).limit(20)
-        res.json(prices)
+        res.status(200).json(prices)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
