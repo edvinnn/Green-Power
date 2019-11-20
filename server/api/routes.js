@@ -96,4 +96,43 @@ router.get('/prosumer/:id/production', async (req, res) => {
     }
 })
 
+// NET PRODUCTION
+// Get prosumer net production by id
+router.get('/prosumer/:id/net_production', async(req, res) => {
+    try {
+        Model.Prosumer.findOne({'_id': req.params.id}, ).exec(function (err, prosumer) {
+            const current_consumption = prosumer.consumption
+            const current_production = prosumer.production
+            const net_production = current_production - current_consumption
+            res.status(200).json(net_production)
+        })
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+} )
+
+// BUFFER
+// Get prosumer buffer by id
+router.get('/prosumer/:id/buffer', async (req, res) => {
+    try {
+        Model.Prosumer.findOne({'_id': req.params.id}).exec(function (err, buffer) {
+            res.status(200).json(buffer.buffer)
+        })
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
+// Get prosumer max buffer by id
+router.get('/prosumer/:id/buffer_max', async (req, res) => {
+    try {
+        Model.Prosumer.findOne({'_id': req.params.id}).exec(function (err, buffer_max) {
+            res.status(200).json(buffer_max.buffer_max)
+        })
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
+
 module.exports = router
