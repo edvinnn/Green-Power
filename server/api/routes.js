@@ -123,6 +123,22 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
     }
 })
 
+// Update prosumer buffer by id
+router.put('/prosumer/:id/buffer', async (req, res) => {
+
+    Model.Prosumer.findOneAndUpdate({"_id": req.params.id}, {"buffer":req.body.buffer}, function (err, u) {
+        try{
+            if(u == null){
+                res.status(404).send()
+            } else{
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    })
+})
+
 // Get prosumer max buffer by id
 router.get('/prosumer/:id/buffer_max', async (req, res) => {
     try {
@@ -132,6 +148,22 @@ router.get('/prosumer/:id/buffer_max', async (req, res) => {
     } catch(err) {
         res.status(500).json({message: err.message})
     }
+})
+
+// Update prosumer max buffer by id
+router.put('/prosumer/:id/buffer_max', async (req, res) => {
+
+    Model.Prosumer.findOneAndUpdate({"_id": req.params.id}, {"buffer_max":req.body.buffer_max}, function (err, u) {
+        try{
+            if(u == null){
+                res.status(404).send()
+            } else{
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    })
 })
 
 
