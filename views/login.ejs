@@ -1,7 +1,8 @@
-<%- include('header'); -%>
+<% include partials/header %>
+
 <h1>Login</h1>
 <% if (messages.error) { %>
-    <%= messages.error %>
+<%= messages.error %>
 <% } %>
 <form action="/login" method="POST">
     <div>
@@ -15,4 +16,5 @@
     <button type="submit">Login</button>
 </form>
 <a href="/register">Register</a>
-<%- include('footer'); -%>
+
+<% include partials/footer %>
