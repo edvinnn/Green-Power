@@ -15,4 +15,5 @@
 | 2019-11-15  | 1       | Refactored the project and split up server to one separate module for the simulator. |
 | 2019-11-18  | 5       | Introduced current price to the simulator based on the last wind and demand, had some problems on how to run it asynchronously based on the last wind and demand but it worked out in the end. |
 | 2019-11-20  | 9       | Added helper files for connections to different databases. Updated models for prosumer and its API. |
+| 2019-11-21  | 1       | Progress on production simulator, problems remains within the different connections. |
 
