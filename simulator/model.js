@@ -31,5 +31,5 @@ let Price = mongoose.model('Price', priceSchema, 'prices')
 module.exports = {
     Wind: Wind,
     Consumer: Consumer,
-    Price: Price,
+    Price: Price
 }

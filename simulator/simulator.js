@@ -1,11 +1,5 @@
-// const mongoose = require('mongoose')
-// const Model = require('./model')
 const sim_db_utils = require('./sim_db_utils')
-
-// mongoose.connect(process.env.SIMULATOR_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true})
-// const db = mongoose.connection
-// db.on('error', (error) => console.error(error))
-// db.once('open', () => console.log('simulator/simulator connected to simulator database'))
+const server_db_utils = require('./server_db_utils')
 
 let last_wind = 0;
 let last_consumption = 0;
@@ -81,13 +75,31 @@ currentPrice = async function(){
     console.log("current price: " + current_price + " kr/kWh")
 }
 
-//Loops and updates database with new winds
+// Update all prosumers with new random production based on wind
+newProduction = async function () {
+    const prosumers = await server_db_utils.getAllProsumers()
+    const wind = last_wind
+    let new_production = 0
+    const iterations = 5;
+    await prosumers.forEach(element => {
+        for(var i = iterations; i > 0; i--){
+            new_production += (Math.random()+0.5)*wind;
+        }
+        new_production = new_production / (iterations * 3)
+        server_db_utils.updateProduction(element.id, new_production)
+        console.log("Prosumer: " + element.id + " updated with new production: " + new_production)
+    })
+}
+
+//Loops and updates database with new simulator values
 async function run() {
     setInterval(async function(){
         await currentWind()
         await currentConsumption()
         currentPrice()
+        await newProduction()
     }, 5000)
 };
+
 
 run()

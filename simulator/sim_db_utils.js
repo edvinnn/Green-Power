@@ -75,5 +75,5 @@ module.exports = {
     updateConsumption: updateConsumption,
     getLatestPrice: getLatestPrice,
     getLatestPrices: getLatestPrices,
-    updatePrice: updatePrice
+    updatePrice: updatePrice,
 }
