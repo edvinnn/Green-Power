@@ -2,6 +2,7 @@ name: Deploy master
 on:
   push:
     branches:
+    - actions-deploy-beanstalk
     - master
     
 jobs:
