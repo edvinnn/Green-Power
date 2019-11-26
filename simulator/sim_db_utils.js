@@ -1,10 +1,4 @@
-const mongoose = require('mongoose')
 const Model = require('./model')
-
-mongoose.connect(process.env.SIMULATOR_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true})
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('simulator/simulator connected to simulator database'))
 
 getLatestWind = async function () {
     const wind = await Model.Wind.find().sort({_id:-1}).limit(1).exec()
@@ -35,12 +29,12 @@ getLatestConsumptions = async function (quantity) {
     return await Model.Consumer.find().sort({_id: -1}).limit(quantity).exec()
 }
 
-updateConsumption = function(new_consumption){
+updateConsumption = async function (new_consumption) {
     var newConsumption = new Model.Consumer({
         consumption: new_consumption
     })
-    newConsumption.save(function(err){
-        if (err){
+    newConsumption.save(function (err) {
+        if (err) {
             console.log(err)
         }
     });
@@ -55,12 +49,12 @@ getLatestPrices = async function (quantity) {
     return await Model.Price.find().sort({_id: -1}).limit(quantity).exec()
 }
 
-updatePrice = function(current_price) {
+updatePrice = async function (current_price) {
     const newPrice = new Model.Price({
         price: current_price
     })
     newPrice.save(function (err) {
-        if(err){
+        if (err) {
             console.log(err)
         }
     })
@@ -75,5 +69,5 @@ module.exports = {
     updateConsumption: updateConsumption,
     getLatestPrice: getLatestPrice,
     getLatestPrices: getLatestPrices,
-    updatePrice: updatePrice
+    updatePrice: updatePrice,
 }

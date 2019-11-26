@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const server_connection = mongoose.createConnection(process.env.SERVER_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
 const prosumerSchema = new mongoose.Schema({
     consumption: {
@@ -36,7 +37,7 @@ const prosumerSchema = new mongoose.Schema({
     }
 });
 
-let Prosumer = mongoose.model('Prosumer', prosumerSchema, 'prosumers');
+let Prosumer = server_connection.model('Prosumer', prosumerSchema, 'prosumers');
 
 module.exports = {
     Prosumer: Prosumer
