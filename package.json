@@ -7,6 +7,7 @@
   "author": "edvinnn <sladic.edvin@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node server/server.js",
     "devStartServer": "nodemon server/server.js",
     "devStartSim": "nodemon simulator/server.js",
     "test": "mocha"
@@ -14,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
+    "cfenv": "^1.2.2",
     "ejs": "^2.7.2",
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
