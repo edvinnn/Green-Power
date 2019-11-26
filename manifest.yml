@@ -1,9 +1,8 @@
 applications:
   - path: .
     name: green-power
-    memory: 256M
+    memory: 128M
     instances: 1
-    disk_quota: 1024M
     buildpack: sdk-for-nodejs
     routes:
       - route: greenpower.eu-gb.mybluemix.net
