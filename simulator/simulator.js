@@ -70,7 +70,7 @@ currentPrice = async function(){
 
     const current_price = wind_price + demand_price
 
-    sim_db_utils.updatePrice(current_price)
+    await sim_db_utils.updatePrice(current_price)
 
     console.log("current price: " + current_price + " kr/kWh")
 }
@@ -96,10 +96,9 @@ async function run() {
     setInterval(async function(){
         await currentWind()
         await currentConsumption()
-        currentPrice()
+        await currentPrice()
         await newProduction()
     }, 5000)
-};
-
+}
 
 run()
