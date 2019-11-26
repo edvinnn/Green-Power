@@ -22,7 +22,7 @@ app.set('view-engine', 'ejs')
 
 var appEnv = cfenv.getAppEnv();
 
-// Setup routes
+//Setup routes
 //const api_routes = require('./api/routes')
 //const web_routes = require('./website/routes')
 //app.use('/api', api_routes)
