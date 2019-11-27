@@ -28,6 +28,16 @@ const prosumerSchema = new mongoose.Schema({
     buffer_max: {
         type: Number,
         required: true,
+        default: 10
+    },
+    over_production_sell: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    under_production_buy: {
+        type: Number,
+        required: true,
         default: 0
     },
     name: {
