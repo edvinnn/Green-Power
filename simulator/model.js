@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 
 const simulator_connection = mongoose.createConnection(process.env.SIMULATOR_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
+simulator_connection.on('connected', () => {
+    console.log('connection established successfully to simulator database');
+});
+
+simulator_connection.on('disconnected', () => {
+    console.log('connection disconnected to simulator database');
+});
+
 const windSchema = new mongoose.Schema({
     wind: {
         type: Number,

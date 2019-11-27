@@ -1,12 +1,6 @@
-const mongoose = require('mongoose')
 const Model = require('./model')
 const passport = require('passport')
 const initializePassport = require('./passport-config')
-
-mongoose.connect(process.env.SERVER_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Server connected to: ' + process.env.SERVER_DATABASE))
 
 initializePassport(
     passport, 
