@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const server_connection = mongoose.createConnection(process.env.SERVER_DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
+server_connection.on('connected', () => {
+    console.log('connection established successfully to server database');
+});
+
+server_connection.on('disconnected', () => {
+    console.log('connection disconnected to server database');
+});
+
 const prosumerSchema = new mongoose.Schema({
     consumption: {
         type: Number,
