@@ -17,4 +17,5 @@
 | 2019-11-20  | 9       | Added helper files for connections to different databases. Updated models for prosumer and its API. |
 | 2019-11-21  | 1       | Progress on production simulator, problems remains within the different connections. |
 | 2019-11-26  | 4       | Finished production simulator, started to look at how tokens can be used in order to secure each API call. |
+| 2019-11-27  | 6       | Improvements on wind, consumer consumption, price and prosumer simulator. Introduced buffer simulator and introduced over_production_sell and under_production_buy to model. |
 
