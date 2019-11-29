@@ -3,7 +3,6 @@ on:
   push:
     branches:
     - master
-    - actions-deploy-beanstalk
     
 jobs:
   build:
