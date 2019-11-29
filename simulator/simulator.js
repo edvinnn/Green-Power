@@ -98,7 +98,7 @@ async function run() {
         await currentConsumption()
         await currentPrice()
         await newProduction()
-    }, 5000)
+    }, process.env.SIMULATOR_TIME)
 }
 
 run()
