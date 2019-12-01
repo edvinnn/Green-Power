@@ -7,6 +7,7 @@
   "author": "edvinnn <sladic.edvin@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node server/server.js & node simulator/server.js",
     "devStartServer": "nodemon server/server.js",
     "devStartSim": "nodemon simulator/server.js",
     "test": "mocha"
