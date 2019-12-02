@@ -224,7 +224,7 @@ async function run() {
         await prosumerProduction()
         await prosumerConsumption()
         await prosumerBuffer()
-    }, 5000)
+    }, process.env.SIMULATOR_TIME)
 }
 
 run()
