@@ -33,12 +33,14 @@ const prosumerSchema = new mongoose.Schema({
     over_production_sell: {
         type: Number,
         required: true,
-        default: 0
+        default: 0,
+        max: 1
     },
     under_production_buy: {
         type: Number,
         required: true,
-        default: 0
+        default: 0,
+        max: 1
     },
     name: {
         type: String,

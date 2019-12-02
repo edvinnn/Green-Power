@@ -38,6 +38,16 @@ updateProsumerBufferSizeById = async function(id, size) {
     return prosumer
 }
 
+updateProsumerOverProductionById = async function(id, over_production_buy) {
+    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"over_production_buy": over_production_buy}).exec()
+    return prosumer
+}
+
+updateProsumerUnderProductionById = async function(id, under_production_buy) {
+    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"under_production_buy": under_production_buy}).exec()
+    return prosumer
+}
+
 registerNewProsumer = async function(name, email, hashed_password) {
     const prosumer = new Model.Prosumer({
         name: name,

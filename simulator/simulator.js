@@ -145,14 +145,18 @@ newConsumption = async function () {
 }
 
 // updates buffer based on net production
-newBuffer = async function () {
+bufferSimulator = async function () {
 
     const prosumers = await server_db_utils.getAllProsumers()
     for(const prosumer of prosumers){
 
-        let last_buffer = prosumer.buffer
-        let diff = prosumer.production - prosumer.consumption
-        let new_buffer = last_buffer + diff / 10
+        // net production
+        let net = prosumer.production - prosumer.consumption
+
+        // update buffer based on net production model
+        let buffer_model = (net / 10)
+
+        let new_buffer = prosumer.buffer + buffer_model
 
         if (new_buffer > prosumer.buffer_max){
             new_buffer = prosumer.buffer_max
@@ -162,9 +166,42 @@ newBuffer = async function () {
             new_buffer = 0
         }
 
+        if(new_buffer < 2 && prosumer.over_production_sell > prosumer.under_production_buy){
+            // Todo:
+            // send warning to client, buffer is about to run out
+        }
+
         await server_db_utils.updateBuffer(prosumer.id, new_buffer.toFixed(2))
     }
 }
+
+sellRatio = async function () {
+
+    const prosumers = await server_db_utils.getAllProsumers()
+    for(const prosumer of prosumers){
+        let ratio = prosumer.buffer * (1 - prosumer.over_production_sell)
+
+        updateBuffer(ratio)
+        updateSelling(1 - ratio)
+    }
+
+}
+
+buyRatio = async function () {
+    const prosumers = await server_db_utils.getAllProsumers()
+    for(const prosumer of prosumers){
+        let ratio = prosumer.buffer * (1 - prosumer.under_production_buy)
+
+        updateBuffer(ratio)
+        updateSelling(1 - ratio)
+    }
+}
+
+sell = async function () {
+
+}
+
+
 
 //Loops and updates database with new simulator values
 async function run() {
@@ -174,7 +211,7 @@ async function run() {
         await currentPrice()
         await newProduction()
         await newConsumption()
-        await newBuffer()
+        await bufferSimulator()
     }, 5000)
 }
 
