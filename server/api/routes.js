@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const server_db_utils = require('../server_db_utils')
-const sim_db_utils = require('../sim_db_utils')
+const sim_db_utils = require('../../simulator/sim_db_utils')
 
 //CONSUMPTION
 //Update prosumer.js consumption by id

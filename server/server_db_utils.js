@@ -38,14 +38,18 @@ updateProsumerBufferSizeById = async function(id, size) {
     return prosumer
 }
 
-updateProsumerOverProductionById = async function(id, over_production_buy) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"over_production_buy": over_production_buy}).exec()
+updateProsumerOverProductionById = async function(id, over_production_sell) {
+    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"over_production_sell": over_production_sell}).exec()
     return prosumer
 }
 
 updateProsumerUnderProductionById = async function(id, under_production_buy) {
     const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"under_production_buy": under_production_buy}).exec()
     return prosumer
+}
+
+updateBalanceById = async function(id, new_balance){
+    return await Model.Prosumer.findOneAndUpdate({"_id": id}, {"balance": new_balance}).exec()
 }
 
 registerNewProsumer = async function(name, email, hashed_password) {
@@ -65,5 +69,8 @@ module.exports = {
     getProsumerById: getProsumerById,
     updateProsumerBufferById: updateProsumerBufferById,
     updateProsumerBufferSizeById: updateProsumerBufferSizeById,
-    registerNewProsumer: registerNewProsumer
+    registerNewProsumer: registerNewProsumer,
+    updateBalanceById: updateBalanceById,
+    updateProsumerUnderProductionById: updateProsumerUnderProductionById,
+    updateProsumerOverProductionById: updateProsumerOverProductionById
 }

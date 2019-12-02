@@ -87,4 +87,14 @@ router.get('/price/latest', async (req, res) => {
     }
 })
 
+router.post('/price', async (req, res) => {
+    try {
+        await sim_db_utils.updatePrice(req.body.price)
+        const price = await sim_db_utils.getLatestPrice()
+        res.status(201).json(price)
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
 module.exports = router

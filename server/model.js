@@ -42,6 +42,11 @@ const prosumerSchema = new mongoose.Schema({
         default: 0,
         max: 1
     },
+    balance: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     name: {
         type: String,
         required: true,
