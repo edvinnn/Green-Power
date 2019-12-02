@@ -8,15 +8,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Fix up git URLs
+      run: echo -e '[url "https://github.com/"]\n  insteadOf = "git@github.com:"' >> ~/.gitconfig
     
     - name: Checkout source code
       uses: actions/checkout@v1
-    
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
+      with:
+        submodules: true
 
     - name: Generate deployment package
-      run: zip -r deploy.zip server simulator views package.json Dockerfile yarn.lock
+      run: zip -r deploy.zip green-power-public server simulator views package.json Dockerfile yarn.lock
       
     - name: Deploy to ElasticBeanstalk
       uses: einaregilsson/beanstalk-deploy@v3
