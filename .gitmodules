@@ -1,0 +1,3 @@
+[submodule "green-power-public"]
+	path = green-power-public
+	url = git@github.com:edvinnn/green-power-public.git

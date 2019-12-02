@@ -11,6 +11,9 @@ jobs:
     
     - name: Checkout source code
       uses: actions/checkout@v1
+    
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.0.0
 
     - name: Generate deployment package
       run: zip -r deploy.zip server simulator views package.json Dockerfile yarn.lock

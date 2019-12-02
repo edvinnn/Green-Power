@@ -16,7 +16,7 @@ router.get('/login', checkNotAuth, async (req, res) => {
     res.render('login.ejs')
 })
 
-router.post('/login', passport.authenticate('local', {successRedirect: '/profile', failureRedirect: '/login', failureFlash: true}))
+router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: true}))
 
 router.get('/register', checkNotAuth, async (req, res) => {
     res.render('register.ejs')
@@ -34,6 +34,10 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         res.status(500)
     }
+})
+
+router.get('/dashboard', checkAuth, async (req, res) => {
+    res.render('dash.ejs', {user: req.user})
 })
 
 router.get('/logout', checkAuth, (req, res) => {
