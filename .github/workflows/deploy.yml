@@ -19,7 +19,7 @@ jobs:
         submodules: true
 
     - name: Generate deployment package
-      run: zip -r deploy.zip server simulator views package.json Dockerfile yarn.lock
+      run: zip -r deploy.zip green-power-public server simulator views package.json Dockerfile yarn.lock
       
     - name: Deploy to ElasticBeanstalk
       uses: einaregilsson/beanstalk-deploy@v3
