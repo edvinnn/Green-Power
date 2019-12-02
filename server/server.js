@@ -7,6 +7,7 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 
+app.use(express.static('green-power-public'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
