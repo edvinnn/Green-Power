@@ -9,9 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
-    - name: Install SSH Key
-      run: echo -e "\n\n\n" | ssh-keygen -t rsa
+
+    - name: Fix up git URLs
+      run: echo -e '[url "https://github.com/"]\n  insteadOf = "git@github.com:"' >> ~/.gitconfig
     
     - name: Checkout source code
       uses: actions/checkout@v1
