@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
-    res.render('dash.ejs', {user: req.user})
+    res.render('dashboard.ejs', {user: req.user})
 })
 
 router.get('/logout', checkAuth, (req, res) => {
