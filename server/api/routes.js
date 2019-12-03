@@ -181,6 +181,15 @@ router.get('/wind', async (req, res) => {
     }
 })
 
+router.ws('/wind/latest', function (ws, req) {
+    ws.on('message', function (msg) {
+        console.log(msg)
+        sim_db_utils.getLatestWind().then((wind) => {
+            ws.send(wind)
+        });
+    });
+});
+
 // Get latest wind
 router.get('/wind/latest', async (req, res) => {
     try {
@@ -258,13 +267,11 @@ router.get('/price/latest', async (req, res) => {
     }
 })
 
-router.ws('/price/latest', function (ws, req) {
+router.ws('/price', function (ws, req) {
     ws.on('message', function (msg) {
-        if(msg === "latest_price"){
-            sim_db_utils.getLatestPrice().then((price) => {
-                ws.send(price)
-            });
-        }
+        sim_db_utils.getLatestPrices(20).then((prices) => {
+            ws.send(JSON.stringify(prices))
+        });
     });
 });
 

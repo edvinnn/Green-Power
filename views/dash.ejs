@@ -711,18 +711,17 @@
   <script src="js/demo/chart-pie-demo.js"></script>
 
   <script>
-    let socket = new WebSocket('<%= process.env.SERVER_WS_ADDRESS %>' + "/api/price/latest")
+    let socket = new WebSocket('<%= process.env.SERVER_WS_ADDRESS %>' + "/api/wind/latest")
 
     socket.onopen = function (e) {
         socket.send("latest_price");
     };
 
     socket.onmessage = function (event) {
-        console.log("Current price from API: ${event.data}");
-        document.getElementById("current_price").innerHTML = "Current price: " + event.data;
+        document.getElementById("current_price").innerHTML = "Current wind: " + event.data + " m/s.";
     };
 
-    socket.onclose = function (event) {
+    /*socket.onclose = function (event) {
         if (event.wasClean) {
             alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
         } else {
@@ -734,7 +733,7 @@
 
     socket.onerror = function (error) {
         alert(`[error] ${error.message}`);
-    };
+    };*/
 </script>
 
 
