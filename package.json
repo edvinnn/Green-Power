@@ -8,8 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node server/server.js & node simulator/server.js",
-    "devStartServer": "nodemon server/server.js",
-    "devStartSim": "nodemon simulator/server.js",
+    "devStart": "nodemon server/server.js",
     "test": "mocha"
   },
   "dependencies": {
