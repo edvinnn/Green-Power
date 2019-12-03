@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
 
@@ -256,5 +257,15 @@ router.get('/price/latest', async (req, res) => {
         res.status(500)
     }
 })
+
+router.ws('/price/latest', function (ws, req) {
+    ws.on('message', function (msg) {
+        if(msg === "latest_price"){
+            sim_db_utils.getLatestPrice().then((price) => {
+                ws.send(price)
+            });
+        }
+    });
+});
 
 module.exports = router

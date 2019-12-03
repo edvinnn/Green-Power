@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 require('../simulator/simulator')
 const express = require('express')
 const app = express()
+const express_websocket = require('express-ws')(app);
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
