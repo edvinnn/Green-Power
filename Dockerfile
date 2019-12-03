@@ -8,7 +8,7 @@ COPY ./ .
 RUN yarn install
 
 #expose the port
-EXPOSE 3000 5000
+EXPOSE 3000
 
 # command to run when intantiate an image
 CMD ["yarn","start"]
