@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
+require('../simulator/simulator')
 const express = require('express')
 const app = express()
 const passport = require('passport')
