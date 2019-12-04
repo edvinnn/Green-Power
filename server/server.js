@@ -28,4 +28,13 @@ const web_routes = require('./website/routes')
 app.use('/api', api_routes)
 app.use('/', web_routes)
 
+app.get('/test', function (req, res, next) {
+    const clients = expressWs.getWss().clients;
+    clients.forEach(client => {
+        console.log("C")
+    });
+    //console.log(expressWs.getWss().clients);
+    res.end();
+});
+
 app.listen(3000, () => console.log('server started'))
