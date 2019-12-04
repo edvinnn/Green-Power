@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
@@ -37,7 +40,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
-    res.render('dashboard.ejs', {user: req.user})
+    res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS})
 })
 
 router.get('/logout', checkAuth, (req, res) => {

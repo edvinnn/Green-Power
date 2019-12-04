@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
 
@@ -125,7 +126,6 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
     }
 })
 
-
 // Get prosumer buffer percentage by id
 router.ws('/prosumer/:id/buffer/percentage', async (req, res) => {
     try {
@@ -140,6 +140,14 @@ router.ws('/prosumer/:id/buffer/percentage', async (req, res) => {
         res.status(500).json({message: err.message})
     }
 })
+
+router.ws('/prosumer/buffer', function (ws, req) {
+    ws.on('message', function (msg) {
+        server_db_utils.getProsumerById(req.user._id).then((user) => {
+            ws.send(JSON.stringify(user.buffer))
+        });
+    });
+});
 
 // Update prosumer buffer by id
 router.put('/prosumer/:id/buffer', async (req, res) => {
@@ -193,6 +201,15 @@ router.get('/wind', async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 })
+
+router.ws('/wind/latest', function (ws, req) {
+    ws.on('message', function (msg) {
+        console.log(msg)
+        sim_db_utils.getLatestWind().then((wind) => {
+            ws.send(wind)
+        });
+    });
+});
 
 // Get latest wind
 router.get('/wind/latest', async (req, res) => {
@@ -270,5 +287,13 @@ router.get('/price/latest', async (req, res) => {
         res.status(500)
     }
 })
+
+router.ws('/price', function (ws, req) {
+    ws.on('message', function (msg) {
+        sim_db_utils.getLatestPrices(24).then((prices) => {
+            ws.send(JSON.stringify(prices))
+        });
+    });
+});
 
 module.exports = router

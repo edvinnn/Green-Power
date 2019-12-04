@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20%</div>
+                                            <div id="buffer_percentage" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20%</div>
                                         </div>
                                         <div class="col">
                                             <div class="progress progress-sm mr-2">
@@ -251,9 +251,5 @@
 <%- include('logout_prompt'); -%>
 <!-- End of Content Wrapper -->
 
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
 <!-- Page level custom scripts -->
-<script src="js/dashboard/chart-area-demo.js"></script>
-<script src="js/dashboard/chart-pie-demo.js"></script>
+<%- include('dashboard_scripts'); -%>
