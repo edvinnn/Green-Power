@@ -24,7 +24,7 @@ updateProsumerProductionById = async function(id, production) {
 }
 
 getProsumerById = async function(id) {
-    const prosumer = await Model.Prosumer.findOne({'_id': req.params.id}).exec()
+    const prosumer = await Model.Prosumer.findOne({'_id': id}).exec()
     return prosumer
 }
 
