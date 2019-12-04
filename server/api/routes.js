@@ -102,9 +102,7 @@ router.get('/prosumer/:id/net_production', async(req, res) => {
         if(prosumer == null){
             res.status(404).send()
         } else{
-            const current_consumption = prosumer.consumption
-            const current_production = prosumer.production
-            const net_production = current_production - current_consumption
+            const net_production = prosumer.production - prosumer.consumption
             res.status(200).json(net_production)
         }
     } catch (err) {
@@ -121,6 +119,22 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
             res.status(404).send()
         } else{
             res.status(200).json(prosumer.buffer)
+        }
+    } catch(err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
+
+// Get prosumer buffer percentage by id
+router.ws('/prosumer/:id/buffer/percentage', async (req, res) => {
+    try {
+        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        if(prosumer == null){
+            res.status(404).send()
+        } else{
+            let percentage = (prosumer.buffer / prosumer.buffer_max) * 100
+            res.status(200).json(percentage)
         }
     } catch(err) {
         res.status(500).json({message: err.message})
