@@ -128,6 +128,14 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
     }
 })
 
+router.ws('/prosumer/buffer', function (ws, req) {
+    ws.on('message', function (msg) {
+        server_db_utils.getProsumerById(req.user._id).then((user) => {
+            ws.send(JSON.stringify(user.buffer))
+        });
+    });
+});
+
 // Update prosumer buffer by id
 router.put('/prosumer/:id/buffer', async (req, res) => {
     const prosumer = await server_db_utils.updateProsumerBufferById(req.params.id, req.body.buffer)
@@ -269,7 +277,7 @@ router.get('/price/latest', async (req, res) => {
 
 router.ws('/price', function (ws, req) {
     ws.on('message', function (msg) {
-        sim_db_utils.getLatestPrices(20).then((prices) => {
+        sim_db_utils.getLatestPrices(24).then((prices) => {
             ws.send(JSON.stringify(prices))
         });
     });
