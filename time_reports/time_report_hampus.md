@@ -19,3 +19,5 @@
 | 2019-11-26  | 4       | Finished production simulator, started to look at how tokens can be used in order to secure each API call. |
 | 2019-11-27  | 6       | Improvements on wind, consumer consumption, price and prosumer simulator. Introduced buffer simulator and introduced over_production_sell and under_production_buy to model. |
 | 2019-12-02  | 7       | Introduced balance and updated buffer simulator with selling and buying variables. | 
+| 2019-12-03  | 3       | Been testing different approaches of showing charts on dashboard. |
+| 2019-12-04  | 6       | Work progress on prosumer dashboard. Built a model for the dashboard which also provides values from the API . |
