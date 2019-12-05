@@ -29,7 +29,7 @@ app.use('/api', api_routes)
 app.use('/', web_routes)
 
 app.get('/test', function (req, res, next) {
-    const clients = expressWs.getWss().clients;
+    const clients = express_websocket.getWss().clients;
     clients.forEach(client => {
         console.log("C")
     });
