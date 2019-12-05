@@ -21,3 +21,4 @@
 | 2019-12-02  | 7       | Introduced balance and updated buffer simulator with selling and buying variables. | 
 | 2019-12-03  | 3       | Been testing different approaches of showing charts on dashboard. |
 | 2019-12-04  | 6       | Work progress on prosumer dashboard. Built a model for the dashboard which also provides values from the API . |
+| 2019-12-05  | 7       | Prosumer dashboard update: sliders that provides functionality to update sell and buy ratio. Did some debugging aswell. |
