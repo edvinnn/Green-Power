@@ -5,8 +5,11 @@ const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
 
 router.ws('/dashboard', function (ws, req) {
-    ws.on('message', async function (msg) {
-        let price = await sim_db_utils.getLatestPrice()
+    ws.on('message', function (msg) {
+        sim_db_utils.getLatestPrice().then((price) => {
+            //electricity price (ep)
+            ws.send(JSON.stringify("ep" + price))
+        })
         server_db_utils.getProsumerById(req.user._id).then((user) => {
             //production (pr)
             ws.send(JSON.stringify("pr" + user.production))
@@ -18,8 +21,6 @@ router.ws('/dashboard', function (ws, req) {
             //buffer percentage (bu)
             let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
             ws.send(JSON.stringify("bu" + percentage))
-            //electricity price (ep)
-            ws.send(JSON.stringify("ep" + price))
             //balance (ba)
             ws.send(JSON.stringify("ba" + user.balance))
         });

@@ -1,12 +1,15 @@
 const Model = require('./model')
 
 getLatestWind = async function () {
-    const wind = await Model.Wind.find().sort({_id:-1}).limit(1).exec()
-    return (wind[0].wind)
+    return Model.Wind.find().sort({_id:-1}).limit(1).exec().then((wind) => {
+        return wind[0].wind
+    })
 }
 
 getLatestWinds = async function (quantity) {
-    return await Model.Wind.find().sort({_id: -1}).limit(quantity).exec()
+    return Model.Wind.find().sort({_id: -1}).limit(quantity).exec().then((winds) => {
+        return winds
+    })
 }
 
 updateWind = async function(new_wind){
@@ -21,12 +24,15 @@ updateWind = async function(new_wind){
 }
 
 getLatestConsumption = async function () {
-    const consumption = await Model.Consumer.find().sort({_id:-1}).limit(1).exec()
-    return consumption[0].consumption
+    return Model.Consumer.find().sort({_id:-1}).limit(1).exec().then((consumption) => {
+        return consumption[0].consumption
+    })
 }
 
 getLatestConsumptions = async function (quantity) {
-    return await Model.Consumer.find().sort({_id: -1}).limit(quantity).exec()
+    return Model.Consumer.find().sort({_id: -1}).limit(quantity).exec().then((consumption) => {
+        return consumption
+    })
 }
 
 updateConsumption = async function (new_consumption) {
@@ -41,12 +47,15 @@ updateConsumption = async function (new_consumption) {
 }
 
 getLatestPrice = async function () {
-    const price = await Model.Price.find().sort({_id:-1}).limit(1).exec()
-    return price[0].price
+    return Model.Price.find().sort({_id:-1}).limit(1).exec().then((price) => {
+        return price[0].price
+    })
 }
 
 getLatestPrices = async function (quantity) {
-    return await Model.Price.find().sort({_id: -1}).limit(quantity).exec()
+    return Model.Price.find().sort({_id: -1}).limit(quantity).exec().then((prices) => {
+        return prices
+    })
 }
 
 updatePrice = async function (current_price) {
