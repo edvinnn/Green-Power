@@ -9,7 +9,11 @@ router.ws('/dashboard', function (ws, req) {
         sim_db_utils.getLatestPrice().then((price) => {
             //electricity price (ep)
             ws.send(JSON.stringify("ep" + price))
-        })
+        });
+        sim_db_utils.getLatestWinds(24).then((winds) => {
+            //wind latest 24h (ch)
+            ws.send("ch" + JSON.stringify(winds))
+        });
         server_db_utils.getProsumerById(req.user._id).then((user) => {
             //production (pr)
             ws.send(JSON.stringify("pr" + user.production))
@@ -132,7 +136,36 @@ router.get('/prosumer/:id/net_production', async(req, res) => {
     } catch (err) {
         res.status(500).json({message: err.message})
     }
-} )
+})
+
+// SELL AND BUY RATIO
+router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.updateProsumerOverProductionById(req.params.id, req.params.ratio).then(() => {
+                res.status(200).send()
+            });
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.updateProsumerUnderProductionById(req.params.id, Number(req.params.ratio)).then(() => {
+                res.status(200).send()
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        }
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
 
 // BUFFER
 // Get prosumer buffer by id
@@ -295,5 +328,19 @@ router.ws('/price', function (ws, req) {
         });
     });
 });
+
+function checkAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('/login')
+}
+
+function checkNotAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    next()
+}
 
 module.exports = router
