@@ -4,6 +4,28 @@ var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
 
+router.ws('/dashboard', function (ws, req) {
+    ws.on('message', async function (msg) {
+        let price = await sim_db_utils.getLatestPrice()
+        server_db_utils.getProsumerById(req.user._id).then((user) => {
+            //production (pr)
+            ws.send(JSON.stringify("pr" + user.production))
+            //consumption (co)
+            ws.send(JSON.stringify("co" + user.consumption))
+            //net (ne)
+            let net = (user.production - user.consumption).toFixed(2)
+            ws.send(JSON.stringify("ne" + net))
+            //buffer percentage (bu)
+            let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
+            ws.send(JSON.stringify("bu" + percentage))
+            //electricity price (ep)
+            ws.send(JSON.stringify("ep" + price))
+            //balance (ba)
+            ws.send(JSON.stringify("ba" + user.balance))
+        });
+    });
+});
+
 //CONSUMPTION
 //Update prosumer consumption by id
 router.put('/prosumer/:id/consumption', async (req, res) => {
@@ -103,9 +125,7 @@ router.get('/prosumer/:id/net_production', async(req, res) => {
         if(prosumer == null){
             res.status(404).send()
         } else{
-            const current_consumption = prosumer.consumption
-            const current_production = prosumer.production
-            const net_production = current_production - current_consumption
+            const net_production = prosumer.production - prosumer.consumption
             res.status(200).json(net_production)
         }
     } catch (err) {
@@ -127,14 +147,6 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
         res.status(500).json({message: err.message})
     }
 })
-
-router.ws('/prosumer/buffer', function (ws, req) {
-    ws.on('message', function (msg) {
-        server_db_utils.getProsumerById(req.user._id).then((user) => {
-            ws.send(JSON.stringify(user.buffer))
-        });
-    });
-});
 
 // Update prosumer buffer by id
 router.put('/prosumer/:id/buffer', async (req, res) => {
