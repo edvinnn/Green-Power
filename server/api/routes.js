@@ -9,7 +9,11 @@ router.ws('/dashboard', function (ws, req) {
         sim_db_utils.getLatestPrice().then((price) => {
             //electricity price (ep)
             ws.send(JSON.stringify("ep" + price))
-        })
+        });
+        sim_db_utils.getLatestWinds(24).then((winds) => {
+            //wind latest 24h (ch)
+            ws.send("ch" + JSON.stringify(winds))
+        });
         server_db_utils.getProsumerById(req.user._id).then((user) => {
             //production (pr)
             ws.send(JSON.stringify("pr" + user.production))
