@@ -8,7 +8,7 @@ const passport = require('passport')
 const server_db_utils = require('./../server_db_utils')
 
 router.get('/', async (req, res) => {
-    res.render('index.ejs', {name: 'Hello, world!'})
+    res.render('index.ejs', {name: 'Welcome!'})
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
-    res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS})
+    res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
 })
 
 router.get('/logout', checkAuth, (req, res) => {

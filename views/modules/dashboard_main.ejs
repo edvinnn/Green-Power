@@ -205,7 +205,9 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sell Ratio:
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">ratio slider</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <input id="sell_slider" onchange="send_sell_value()" type="range" class="custom-range" min="0" max="1" value="0" step="0.01">
+                                    </div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-plus-circle fa-2x text-gray-300"></i>
@@ -223,7 +225,9 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Buy Ratio:
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">ratio slider</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <input id="buy_slider" onchange="send_buy_value()" type="range" class="custom-range" min="0" max="1" value="0" step="0.01">
+                                    </div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-minus-circle fa-2x text-gray-300"></i>

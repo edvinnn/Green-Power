@@ -167,6 +167,35 @@ router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
+router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getProsumerById(req.params.id).then((prosumer) => {
+                res.status(200).json(prosumer.over_production_sell)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+router.get('/prosumer/:id/buy_ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getProsumerById(req.params.id).then((prosumer) => {
+                res.status(200).json(prosumer.under_production_buy)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+
 // BUFFER
 // Get prosumer buffer by id
 router.get('/prosumer/:id/buffer', async (req, res) => {
