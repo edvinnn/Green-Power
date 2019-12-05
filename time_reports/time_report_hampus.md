@@ -15,4 +15,9 @@
 | 2019-11-15  | 1       | Refactored the project and split up server to one separate module for the simulator. |
 | 2019-11-18  | 5       | Introduced current price to the simulator based on the last wind and demand, had some problems on how to run it asynchronously based on the last wind and demand but it worked out in the end. |
 | 2019-11-20  | 9       | Added helper files for connections to different databases. Updated models for prosumer and its API. |
-
+| 2019-11-21  | 1       | Progress on production simulator, problems remains within the different connections. |
+| 2019-11-26  | 4       | Finished production simulator, started to look at how tokens can be used in order to secure each API call. |
+| 2019-11-27  | 6       | Improvements on wind, consumer consumption, price and prosumer simulator. Introduced buffer simulator and introduced over_production_sell and under_production_buy to model. |
+| 2019-12-02  | 7       | Introduced balance and updated buffer simulator with selling and buying variables. | 
+| 2019-12-03  | 3       | Been testing different approaches of showing charts on dashboard. |
+| 2019-12-04  | 6       | Work progress on prosumer dashboard. Built a model for the dashboard which also provides values from the API . |
