@@ -69,6 +69,20 @@
         });
     }
 
+    $(document).ready(function () {
+        fetch('<%= api %>/prosumer/<%= user.id %>/sell_ratio').then((response) => {
+            response.json().then((value) => {
+                document.getElementById("sell_slider").value = value
+            })
+        })
+
+        fetch('<%= api %>/prosumer/<%= user.id %>/buy_ratio').then((response) => {
+            response.json().then((value) => {
+                document.getElementById("buy_slider").value = value
+            })
+        })
+    })
+
 </script>
 
 <%- include('winds_chart_script'); -%>
