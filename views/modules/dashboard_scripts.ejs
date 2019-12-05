@@ -1,6 +1,8 @@
 <script src="vendor/chart.js/Chart.min.js"></script> <!-- Library for the charts -->
 <script src="js/dashboard/chart-area-demo.js"></script>
 <script src="js/dashboard/chart-pie-demo.js"></script>
+<script src="vendor/jquery/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <script>
     let socket = new WebSocket("<%= ws  %>/api/dashboard/");
@@ -39,4 +41,27 @@
     socket.onerror = function (error) {
         alert(`[error] ${error.message}`);
     };
+
+    function send_sell_value(){
+
+        let sell_ratio = document.getElementById("sell_slider").valu
+        $.ajax({
+            url: '<%= api %>/prosumer/<%= user.id %>/sell_ratio/' + sell_ratio,
+            type: 'PUT',
+            success: function () {
+            }
+        });
+    }
+
+    function send_buy_value() {
+
+        let buy_ratio = document.getElementById("buy_slider").value
+        $.ajax({
+            url: '<%= api %>/prosumer/<%= user.id %>/buy_ratio/' + buy_ratio,
+            type: 'PUT',
+            success: function () {
+            }
+        });
+    }
+
 </script>
