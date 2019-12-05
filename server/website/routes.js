@@ -8,7 +8,7 @@ const passport = require('passport')
 const server_db_utils = require('./../server_db_utils')
 
 router.get('/', async (req, res) => {
-    res.render('index.ejs', {name: 'Hello, world!'})
+    res.render('index.ejs', {name: 'Welcome!'})
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
