@@ -28,7 +28,7 @@ currentWind = async function() {
     }
 
     if (new_wind < 5){
-        new_wind = new_wind + Math.random()
+        new_wind = new_wind + Math.random() * 2
     }
 
     new_wind = new_wind.toFixed(2)
@@ -105,7 +105,7 @@ prosumerProduction = async function () {
     const prosumers = await server_db_utils.getAllProsumers()
     const wind = last_wind
     let new_production = 0
-    const iterations = 5
+    const iterations = 10
 
     for(const prosumer of prosumers){
         for(var i = iterations; i > 0; i--){
@@ -125,21 +125,23 @@ prosumerProduction = async function () {
 prosumerConsumption = async function () {
     const prosumers = await server_db_utils.getAllProsumers()
     let new_consumption = 0
-    const iterations = 5
+    const iterations = 10
     for(const prosumer of prosumers){
         for(var i = iterations; i>0; i--){
             new_consumption += (Math.random() * prosumer.consumption)
         }
         new_consumption = new_consumption / iterations
 
-        if(new_consumption < 2){
-            new_consumption = new_consumption + Math.random() * 4
+        // min consumption
+        if(new_consumption < 2.3){
+            new_consumption = 2.3 + Math.random()
         }
 
         // max consumption
-        if(new_consumption > 11) {
-            new_consumption =  Math.random() * 11
+        if(new_consumption > 3.7){
+            new_consumption = 3.7 - Math.random()
         }
+
         await server_db_utils.updateProsumerConsumptionById(prosumer.id, new_consumption.toFixed(2))
     }
 }
@@ -157,6 +159,7 @@ prosumerBuffer = async function () {
         let buffer_model = (net / 10)
 
         let new_buffer = prosumer.buffer + buffer_model
+        buffer_model = new_buffer
 
         if (new_buffer > prosumer.buffer_max){
             new_buffer = prosumer.buffer_max
@@ -171,7 +174,7 @@ prosumerBuffer = async function () {
         // selling with positive net production
         if((prosumer.over_production_sell > 0) && (net > 0)) {
 
-            let diff = new_buffer - prosumer.buffer
+            let diff = buffer_model - prosumer.buffer
             let sell = diff * prosumer.over_production_sell * current_price
             let conserve = diff * (1 - prosumer.over_production_sell)
 
@@ -181,14 +184,13 @@ prosumerBuffer = async function () {
 
         // selling with negative net production not possible atm (should not necessarily sell)
         if((prosumer.over_production_sell > 0) && (net < 0)){
-            await server_db_utils.updateProsumerOverProductionById(prosumer.id, 0)
             await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
         }
 
         // buying with negative net production
         if((prosumer.under_production_buy > 0) && (net < 0)) {
 
-            let diff = prosumer.buffer - new_buffer
+            let diff = prosumer.buffer - buffer_model
             let buy = diff * prosumer.under_production_buy * current_price
             let bought = diff * prosumer.under_production_buy
 
@@ -204,14 +206,12 @@ prosumerBuffer = async function () {
 
         // buying with positive net production not possible atm (should not necessarily buy)
         if((prosumer.under_production_buy > 0) && (net > 0)){
-            await server_db_utils.updateProsumerUnderProductionById(prosumer.id, 0)
             await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
         }
 
         if((prosumer.under_production_buy === 0) && (prosumer.over_production_sell === 0)){
             await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
         }
-
     }
 }
 
