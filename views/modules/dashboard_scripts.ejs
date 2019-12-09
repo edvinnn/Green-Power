@@ -27,7 +27,7 @@
         } else if (event.data.slice(0, 2) === "ch") {
             let winds = JSON.parse(event.data.slice(2, event.data.length))
             winds.forEach(obj => {
-                winds_data.push(obj.wind)
+                winds_data.unshift(obj.wind)
             });
             windsChart.update()
         }
