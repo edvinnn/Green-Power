@@ -8,6 +8,9 @@ const passport = require('passport')
 const server_db_utils = require('./../server_db_utils')
 
 router.get('/', async (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.redirect('/dashboard')
+    }
     res.render('index.ejs', {name: 'Welcome!'})
 })
 
