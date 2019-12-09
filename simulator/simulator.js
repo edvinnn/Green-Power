@@ -132,16 +132,14 @@ prosumerConsumption = async function () {
         }
         new_consumption = new_consumption / iterations
 
+        // min consumption
         if(new_consumption < 2.3){
             new_consumption = 2.3 + Math.random()
         }
 
+        // max consumption
         if(new_consumption > 3.7){
             new_consumption = 3.7 - Math.random()
-        }
-        // max consumption
-        if(new_consumption > 11) {
-            new_consumption =  11 - Math.random()
         }
 
         await server_db_utils.updateProsumerConsumptionById(prosumer.id, new_consumption.toFixed(2))
