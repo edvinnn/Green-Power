@@ -14,7 +14,7 @@
             <div class="row">
 
                 <!-- Profile info card -->
-                <div class="col-xl-7 col-lg6">
+                <div class="col-xl-7 col-lg-6">
                     <div class="card shadow mb-4">
                         <!-- Card header -->
                         <div title="Your profile info"
@@ -22,37 +22,59 @@
                             <h6 class="m-0 font-weight-bold text-primary">Your profile</h6>
                         </div>
                         <div class="card-body">
-                            <h5 class="text-primary">Name</h5>
-                            <p><%= user.name %></p>
-                            <h5 class="text-primary">Email</h5>
-                            <p><%= user.email %></p>
+                            <div class="row">
 
-                            <br>
+                                <!-- Left side -->
+                                <div class="col">
+                                    <h5 class="text-primary">Name <a href="#"><span style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p><%= user.name %></p>
+                                    <h5 class="text-primary">Email <a href="#"><span style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p><%= user.email %></p>
 
-                            <form action="/change_password" method="POST">
-                                <h5 class="text-primary">Change password</h5>
-                                <div class="form-group">
-                                    <label for="password">Old password</label>
-                                    <input type="password" class="form-control form-control-user" id="old_password"
-                                        name="old_password" aria-describedby="passwordHelp"
-                                        placeholder="Enter old passord...">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">New password</label>
-                                    <input type="password" class="form-control form-control-user" id="password"
-                                        name="password1" aria-describedby="passwordHelp"
-                                        placeholder="Enter new passord...">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Repeat new password</label>
-                                    <input type="password" class="form-control form-control-user" id="passord"
-                                        name="passord2" aria-describedby="passwordHelp"
-                                        placeholder="Enter new passord again...">
-                                </div>
+                                    <br>
+                                    <br>
 
-                                <button type="submit" class="btn btn-primary btn-user btn-block" disabled>Change
-                                    password</button>
-                            </form>
+                                    <form action="/change_password" method="POST">
+                                        <h5 class="text-primary">Change password</h5>
+                                        <div class="form-group">
+                                            <label for="password">Old password</label>
+                                            <input type="password" class="form-control form-control-user"
+                                                id="old_password" name="old_password" aria-describedby="passwordHelp"
+                                                placeholder="Enter old passord...">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">New password</label>
+                                            <input type="password" class="form-control form-control-user" id="password"
+                                                name="password1" aria-describedby="passwordHelp"
+                                                placeholder="Enter new passord...">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">Repeat new password</label>
+                                            <input type="password" class="form-control form-control-user" id="passord"
+                                                name="passord2" aria-describedby="passwordHelp"
+                                                placeholder="Enter new passord again...">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-user btn-block" disabled>Change password</button>
+                                    </form>
+                                </div>
+                                <!-- End of Left side-->
+
+                                <!-- Middle -->
+                                <div class="col">
+                                    <h5 class="text-primary">Wind turbine <a href="#"><span style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>ABB Smooth Electric Xs1000</p>
+                                    <h5 class="text-primary">Battery model <a href="#"><span style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>ABB Lithium 50 000mAh</p>
+                                </div>
+                                <!-- End of middle -->
+
+                                <!-- Right side -->
+                                <div class="col">
+                                    <h5 class="text-primary">Address <a href="#"><span style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>Laboratorievägen 21<br>97756 Luleå<br>Sweden</p>
+                                </div>
+                                <!-- End of Right side -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,12 +88,14 @@
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
-                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=1950&q=80" alt="Italian Trulli">
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=1950&q=80"
+                                alt="Italian Trulli">
 
                             <form action="/upload_house" method="POST">
                                 <div class="form-group">
                                     <br>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block" disabled>Upload</button>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block"
+                                        disabled>Upload</button>
                                 </div>
                             </form>
                         </div>
