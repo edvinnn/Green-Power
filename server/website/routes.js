@@ -42,6 +42,20 @@ router.post('/register', async (req, res) => {
     }
 })
 
+router.post('/register/manager', async (req, res) => {
+    try {
+        const hashed_pwd = await bcrypt.hash(req.body.password, 10)
+        const manager = server_db_utils.registerNewManager(req.body.name, req.body.email, hashed_pwd)
+        if(manager != null) {
+            res.redirect('/login')
+        } else {
+            res.status(500).send({message: "Could not create manager."})
+        }
+    } catch (err) {
+        res.status(500)
+    }
+})
+
 router.get('/dashboard', checkAuth, async (req, res) => {
     res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
 })

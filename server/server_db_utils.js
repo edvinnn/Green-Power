@@ -18,6 +18,11 @@ getAllProsumers = async function() {
     return prosumers
 }
 
+getAllManagers = async function() {
+    const managers = await Model.Manager.find().exec()
+    return managers
+}
+
 updateProsumerProductionById = async function(id, production) {
     const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"production": production}).exec()
     return prosumer
@@ -62,6 +67,21 @@ registerNewProsumer = async function(name, email, hashed_password) {
     return prosumer
 }
 
+registerNewManager = async function(name, email, hashed_password){
+    const manager = new Model.Manager({
+        name: name,
+        email: email,
+        password: hashed_password
+    })
+    await manager.save()
+    return manager
+}
+
+updateManagerProductionById = async function(id, production) {
+    const manager = await Model.Manager.findOneAndUpdate({"_id": id}, {"production": production}).exec()
+    return manager
+}
+
 module.exports = {
     updateProsumerConsumptionById: updateProsumerConsumptionById,
     getAllProsumers: getAllProsumers,
@@ -72,5 +92,8 @@ module.exports = {
     registerNewProsumer: registerNewProsumer,
     updateBalanceById: updateBalanceById,
     updateProsumerUnderProductionById: updateProsumerUnderProductionById,
-    updateProsumerOverProductionById: updateProsumerOverProductionById
+    updateProsumerOverProductionById: updateProsumerOverProductionById,
+    registerNewManager: registerNewManager,
+    getAllManagers: getAllManagers,
+    updateManagerProductionById: updateManagerProductionById
 }

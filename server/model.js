@@ -62,8 +62,59 @@ const prosumerSchema = new mongoose.Schema({
     }
 });
 
+
+const managerSchema = new mongoose.Schema({
+    consumption: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    production: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    buffer: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    buffer_max: {
+        type: Number,
+        required: true,
+        default: 100
+    },
+    over_production_sell: {
+        type: Number,
+        required: true,
+        default: 0,
+        max: 1
+    },
+    balance: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    name: {
+        type: String,
+        required: true,
+        default: ""
+    },
+    email: {
+        type: String,
+        required: true,
+        default: ""
+    },
+    password: {
+        type: String
+    }
+});
+
+
 let Prosumer = server_connection.model('Prosumer', prosumerSchema, 'prosumers');
+let Manager = server_connection.model('Manager', managerSchema, 'managers');
 
 module.exports = {
-    Prosumer: Prosumer
+    Prosumer: Prosumer,
+    Manager: Manager
 }
