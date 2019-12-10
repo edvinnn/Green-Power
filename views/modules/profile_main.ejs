@@ -1,6 +1,5 @@
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
-
     <!-- Main Content -->
     <div id="content">
 
@@ -8,7 +7,58 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        </div>
 
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4"></div>
+
+            <div class="row">
+               
+                <!-- Profile info card -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <!-- Card header -->
+                        <div title="Your profile info"
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Your profile</h6>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie Chart -->
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div title="Pie chart of your current electricity usage, (shown in %)"
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Your house</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of first row-->
+
+        </div>
     </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; Green Power 2019</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
 </div>
+
+<%- include('logout_prompt'); -%>
+<!-- End of Content Wrapper -->
