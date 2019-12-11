@@ -177,9 +177,16 @@ prosumerBuffer = async function () {
             if(prosumer.over_production_sell > 0){
                 let sell = diff * prosumer.over_production_sell * current_price
                 let conserve = diff * (1 - prosumer.over_production_sell)
+                console.log(sell)
+                console.log(prosumer.balance)
 
-                await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
-                await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + conserve).toFixed(2))
+                if(prosumer.buffer + conserve > prosumer.buffer_max){
+                    await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
+                }
+                else {
+                    await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + conserve).toFixed(2))
+                }
             }
             // buying with positive net production not possible atm (should not necessarily buy) or if both sliders set to 0
             else{
@@ -215,8 +222,8 @@ async function run() {
         await currentWind()
         await consumerConsumption()
         await currentPrice()
-        await prosumerProduction()
-        await prosumerConsumption()
+        //await prosumerProduction()
+        //await prosumerConsumption()
         await prosumerBuffer()
     }, process.env.SIMULATOR_TIME)
 }
