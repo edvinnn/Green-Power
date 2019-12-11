@@ -4,73 +4,76 @@ const initializePassport = require('./passport-config')
 
 initializePassport(
     passport, 
-    email => Model.Prosumer.find({email: email}).exec(),
-    id => Model.Prosumer.findById(id).exec()
+    email => Model.User.find({email: email}).exec(),
+    id => Model.User.findById(id).exec()
 )
 
-updateProsumerConsumptionById = async function(id, consumption) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"consumption": consumption}).exec()
-    return prosumer
+updateConsumptionById = async function(id, consumption) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"consumption": consumption}).exec()
+}
+
+getAllUsers = async function() {
+    return await Model.User.find().exec()
 }
 
 getAllProsumers = async function() {
-    const prosumers = await Model.Prosumer.find().exec()
-    return prosumers
+    return await Model.User.find({isManager: false}).exec()
 }
 
-updateProsumerProductionById = async function(id, production) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"production": production}).exec()
-    return prosumer
+getAllManagers = async function() {
+    return await Model.User.find({isManager: true}).exec()
 }
 
-getProsumerById = async function(id) {
-    const prosumer = await Model.Prosumer.findOne({'_id': id}).exec()
-    return prosumer
+getUserById = async function(id) {
+    return await Model.User.findOne({'_id': id}).exec()
 }
 
-updateProsumerBufferById = async function(id, buffer) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"buffer": buffer}).exec()
-    return prosumer
+updateProductionById = async function(id, production) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"production": production}).exec()
 }
 
-updateProsumerBufferSizeById = async function(id, size) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"buffer_max": size}).exec()
-    return prosumer
+updateBufferById = async function(id, buffer) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": buffer}).exec()
 }
 
-updateProsumerOverProductionById = async function(id, over_production_sell) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"over_production_sell": over_production_sell}).exec()
-    return prosumer
+updateBufferSizeById = async function(id, size) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer_max": size}).exec()
 }
 
-updateProsumerUnderProductionById = async function(id, under_production_buy) {
-    const prosumer = await Model.Prosumer.findOneAndUpdate({"_id": id}, {"under_production_buy": under_production_buy}).exec()
-    return prosumer
+updateOverProductionById = async function(id, over_production_sell) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"over_production_sell": over_production_sell}).exec()
+}
+
+updateUnderProductionById = async function(id, under_production_buy) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"under_production_buy": under_production_buy}).exec()
 }
 
 updateBalanceById = async function(id, new_balance){
-    return await Model.Prosumer.findOneAndUpdate({"_id": id}, {"balance": new_balance}).exec()
+    return await Model.User.findOneAndUpdate({"_id": id}, {"balance": new_balance}).exec()
 }
 
-registerNewProsumer = async function(name, email, hashed_password) {
-    const prosumer = new Model.Prosumer({
+registerNewUser = async function(name, email, hashed_password, isManager) {
+    const user = new Model.User({
         name: name,
         email: email,
-        password: hashed_password
+        password: hashed_password,
+        isManager: isManager
     })
-    await prosumer.save()
-    return prosumer
+    await user.save()
+    return user
 }
 
 module.exports = {
-    updateProsumerConsumptionById: updateProsumerConsumptionById,
+    updateConsumptionById: updateConsumptionById,
     getAllProsumers: getAllProsumers,
-    updateProsumerProductionById: updateProsumerProductionById,
-    getProsumerById: getProsumerById,
-    updateProsumerBufferById: updateProsumerBufferById,
-    updateProsumerBufferSizeById: updateProsumerBufferSizeById,
-    registerNewProsumer: registerNewProsumer,
+    updateProductionById: updateProductionById,
+    getUserById: getUserById,
+    updateBufferById: updateBufferById,
+    updateBufferSizeById: updateBufferSizeById,
+    registerNewUser: registerNewUser,
     updateBalanceById: updateBalanceById,
-    updateProsumerUnderProductionById: updateProsumerUnderProductionById,
-    updateProsumerOverProductionById: updateProsumerOverProductionById
+    updateUnderProductionById: updateUnderProductionById,
+    updateOverProductionById: updateOverProductionById,
+    getAllManagers: getAllManagers,
+    getAllUsers: getAllUsers
 }
