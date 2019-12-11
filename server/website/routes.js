@@ -22,7 +22,7 @@ router.get('/login', checkNotAuth, async (req, res) => {
     res.render('login.ejs')
 })
 
-router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: true}))
+router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard' ,failureRedirect: '/login', failureFlash: true}))
 
 router.get('/register', checkNotAuth, async (req, res) => {
     res.render('register.ejs')
@@ -31,8 +31,8 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const prosumer = server_db_utils.registerNewProsumer(req.body.name, req.body.email, hashed_pwd)
-        if(prosumer != null) {
+        const user = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, false)
+        if(user != null) {
             res.redirect('/login')
         } else {
             res.status(500).send({message: "Could not create user."})
@@ -42,8 +42,26 @@ router.post('/register', async (req, res) => {
     }
 })
 
+router.post('/register/manager', async (req, res) => {
+    try {
+        const hashed_pwd = await bcrypt.hash(req.body.password, 10)
+        const manager = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, true)
+        if(manager != null) {
+            res.redirect('/login')
+        } else {
+            res.status(500).send({message: "Could not create manager."})
+        }
+    } catch (err) {
+        res.status(500)
+    }
+})
+
 router.get('/dashboard', checkAuth, async (req, res) => {
-    res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+    if(req.user.isManager){
+        res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+    } else {
+        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+    }
 })
 
 router.get('/logout', checkAuth, (req, res) => {

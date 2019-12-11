@@ -9,7 +9,7 @@ server_connection.on('disconnected', () => {
     console.log('connection disconnected to server database');
 });
 
-const prosumerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     consumption: {
         type: Number,
         required: true,
@@ -59,11 +59,16 @@ const prosumerSchema = new mongoose.Schema({
     },
     password: {
         type: String
+    },
+    isManager: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
-let Prosumer = server_connection.model('Prosumer', prosumerSchema, 'prosumers');
+let User = server_connection.model('User', userSchema, 'users');
 
 module.exports = {
-    Prosumer: Prosumer
+    User: User
 }

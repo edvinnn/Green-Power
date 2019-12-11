@@ -14,7 +14,7 @@ router.ws('/dashboard', function (ws, req) {
             //wind latest 24h (ch)
             ws.send("ch" + JSON.stringify(winds))
         });
-        server_db_utils.getProsumerById(req.user._id).then((user) => {
+        server_db_utils.getUserById(req.user._id).then((user) => {
             //production (pr)
             ws.send(JSON.stringify("pr" + user.production))
             //consumption (co)
@@ -36,7 +36,7 @@ router.ws('/dashboard', function (ws, req) {
 router.put('/prosumer/:id/consumption', async (req, res) => {
 
     try{
-        const prosumer = await server_db_utils.updateProsumerConsumptionById(req.params.id, req.body.consumption)
+        const prosumer = await server_db_utils.updateConsumptionById(req.params.id, req.body.consumption)
         if (prosumer == null) {
             res.status(404).send()
         } else {
@@ -66,7 +66,7 @@ router.get('/prosumer/consumption', async (req, res) => {
 // Get prosumer consumption by id
 router.get('/prosumer/:id/consumption', async (req, res) => {
     try {
-        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        const prosumer = await server_db_utils.getUserById(req.params.id)
         if(prosumer == null){
             res.status(404).send()
         } else{
@@ -81,7 +81,7 @@ router.get('/prosumer/:id/consumption', async (req, res) => {
 // Update prosumer production by id
 router.put('/prosumer/:id/production', async (req, res) => {
     try{
-        const prosumer = await server_db_utils.updateProsumerProductionById(req.params.id, req.body.production)
+        const prosumer = await server_db_utils.updateProductionById(req.params.id, req.body.production)
         if (prosumer == null) {
             res.status(404).send()
         } else {
@@ -111,7 +111,7 @@ router.get('/prosumer/production', async (req, res) => {
 // Get prosumer production by id
 router.get('/prosumer/:id/production', async (req, res) => {
     try {
-        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        const prosumer = await server_db_utils.getUserById(req.params.id)
         if (prosumer == null) {
             res.status(404).send()
         } else{
@@ -126,7 +126,7 @@ router.get('/prosumer/:id/production', async (req, res) => {
 // Get prosumer net production by id
 router.get('/prosumer/:id/net_production', async(req, res) => {
     try {
-        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        const prosumer = await server_db_utils.getUserById(req.params.id)
         if(prosumer == null){
             res.status(404).send()
         } else{
@@ -142,7 +142,7 @@ router.get('/prosumer/:id/net_production', async(req, res) => {
 router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
-            server_db_utils.updateProsumerOverProductionById(req.params.id, req.params.ratio).then(() => {
+            server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
                 res.status(200).send()
             });
         } catch (err) {
@@ -156,7 +156,7 @@ router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
 router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
-            server_db_utils.updateProsumerUnderProductionById(req.params.id, Number(req.params.ratio)).then(() => {
+            server_db_utils.updateUnderProductionById(req.params.id, Number(req.params.ratio)).then(() => {
                 res.status(200).send()
             })
         } catch (err) {
@@ -170,7 +170,7 @@ router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
 router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
-            server_db_utils.getProsumerById(req.params.id).then((prosumer) => {
+            server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.over_production_sell)
             })
         } catch (err) {
@@ -184,7 +184,7 @@ router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
 router.get('/prosumer/:id/buy_ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
-            server_db_utils.getProsumerById(req.params.id).then((prosumer) => {
+            server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.under_production_buy)
             })
         } catch (err) {
@@ -200,7 +200,7 @@ router.get('/prosumer/:id/buy_ratio', checkAuth, async(req, res) => {
 // Get prosumer buffer by id
 router.get('/prosumer/:id/buffer', async (req, res) => {
     try {
-        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        const prosumer = await server_db_utils.getUserById(req.params.id)
         if(prosumer == null){
             res.status(404).send()
         } else{
@@ -213,7 +213,7 @@ router.get('/prosumer/:id/buffer', async (req, res) => {
 
 // Update prosumer buffer by id
 router.put('/prosumer/:id/buffer', async (req, res) => {
-    const prosumer = await server_db_utils.updateProsumerBufferById(req.params.id, req.body.buffer)
+    const prosumer = await server_db_utils.updateBufferById(req.params.id, req.body.buffer)
     try{
         if(prosumer == null){
             res.status(404).send()
@@ -228,7 +228,7 @@ router.put('/prosumer/:id/buffer', async (req, res) => {
 // Get prosumer max buffer by id
 router.get('/prosumer/:id/buffer_max', async (req, res) => {
     try {
-        const prosumer = await server_db_utils.getProsumerById(req.params.id)
+        const prosumer = await server_db_utils.getUserById(req.params.id)
         if(prosumer == null){
             res.status(404).send()
         } else {
@@ -242,7 +242,7 @@ router.get('/prosumer/:id/buffer_max', async (req, res) => {
 // Update prosumer max buffer by id
 router.put('/prosumer/:id/buffer_max', async (req, res) => {
     try{
-        const prosumer = await server_db_utils.updateProsumerBufferSizeById(req.params.id, req.body.buffer_max)
+        const prosumer = await server_db_utils.updateBufferSizeById(req.params.id, req.body.buffer_max)
         if (prosumer == null) {
             res.status(404).send()
         } else {
