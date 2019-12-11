@@ -1,0 +1,196 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+
+        <%- include('topbar') -%>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4"></div>
+
+            <div class="row">
+
+                <!-- Profile info card -->
+                <div class="col-xl-7 col-lg-6">
+                    <div class="card shadow mb-4">
+                        <!-- Card header -->
+                        <div title="Your profile info"
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Your profile</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <!-- Left side -->
+                                <div class="col">
+                                    <h5 class="text-primary">Name <a href="#" data-toggle="modal"
+                                            data-target="#nameModal"><span style="font-size: 70%;"><i
+                                                    class="fas fa-pen"></i></span></a></h5>
+                                    <p><%= user.name %></p>
+                                    <h5 class="text-primary">Email <a href="#" data-toggle="modal"
+                                        data-target="#emailModal"><span style="font-size: 70%;"><i
+                                                    class="fas fa-pen"></i></span></a></h5>
+                                    <p><%= user.email %></p>
+
+                                    <br>
+                                    <br>
+
+                                    <form action="/change_password" method="POST">
+                                        <h5 class="text-primary">Change password</h5>
+                                        <div class="form-group">
+                                            <label for="password">Old password</label>
+                                            <input type="password" class="form-control form-control-user"
+                                                id="old_password" name="old_password" aria-describedby="passwordHelp"
+                                                placeholder="Enter old passord...">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">New password</label>
+                                            <input type="password" class="form-control form-control-user" id="password"
+                                                name="password1" aria-describedby="passwordHelp"
+                                                placeholder="Enter new passord...">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">Repeat new password</label>
+                                            <input type="password" class="form-control form-control-user" id="passord"
+                                                name="passord2" aria-describedby="passwordHelp"
+                                                placeholder="Enter new passord again...">
+                                        </div>
+                                        <button id="new-name-submit" type="submit"
+                                            class="btn btn-primary btn-user btn-block" disabled>Change
+                                            password</button>
+                                    </form>
+                                </div>
+                                <!-- End of Left side-->
+
+                                <!-- Middle -->
+                                <div class="col">
+                                    <h5 class="text-primary">Wind turbine <a href="#" class="disabled"><span
+                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>ABB Smooth Electric Xs1000</p>
+                                    <h5 class="text-primary">Battery model <a href="#" class="disabled"><span
+                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>ABB Lithium 50 000mAh</p>
+                                </div>
+                                <!-- End of middle -->
+
+                                <!-- Right side -->
+                                <div class="col">
+                                    <h5 class="text-primary">Address <a href="#" class="disabled"><span
+                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                    <p>Laboratorievägen 21<br>97756 Luleå<br>Sweden</p>
+                                </div>
+                                <!-- End of Right side -->
+
+                                <!-- Change name modal -->
+                                <div class="modal" id="nameModal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Change name</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/api/prosumer/change_name" method="POST">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="name" name="name" aria-describedby="nameHelp"
+                                                            placeholder="Enter new name...">
+                                                    </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary"
+                                                    onclick="$('#nameModal').modal('hide')">Save changes</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End of change name modal -->
+
+                                <!-- Change email modal -->
+                                <div class="modal" id="emailModal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Change email</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/api/prosumer/change_email" method="POST">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="email" name="email" aria-describedby="emailHelp"
+                                                            placeholder="Enter new email...">
+                                                    </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary"
+                                                    onclick="$('#emailModal').modal('hide')">Save changes</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End of change email modal -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie Chart -->
+                <div class="col-xl-5 col-lg-6">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Your house</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=1950&q=80"
+                                alt="Italian Trulli">
+
+                            <form action="/upload_house" method="POST">
+                                <div class="form-group">
+                                    <br>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block"
+                                        disabled>Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of first row-->
+
+        </div>
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; Green Power 2019</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+</div>
+
+<%- include('logout_prompt'); -%>
+<!-- End of Content Wrapper -->
