@@ -8,10 +8,8 @@ const passport = require('passport')
 const server_db_utils = require('./../server_db_utils')
 
 router.get('/', async (req, res) => {
-    if (req.isAuthenticated() && !req.user.isManager) {
+    if (req.isAuthenticated()) {
         return res.redirect('/dashboard')
-    }   else if (req.isAuthenticated() && req.user.isManager){
-        return res.redirect('/manager/dashboard')
     }
     res.render('index.ejs', {name: 'Welcome!'})
 })
@@ -24,13 +22,7 @@ router.get('/login', checkNotAuth, async (req, res) => {
     res.render('login.ejs')
 })
 
-router.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true}), function (req, res) {
-    if (req.user.isManager){
-        res.redirect('/manager/dashboard')
-    }   else {
-        res.redirect('/dashboard')
-    }
-})
+router.post('/login', passport.authenticate('local', {successRedirect: '/dashboard' ,failureRedirect: '/login', failureFlash: true}))
 
 router.get('/register', checkNotAuth, async (req, res) => {
     res.render('register.ejs')
@@ -65,14 +57,10 @@ router.post('/register/manager', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
-    res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
-})
-
-router.get('/manager/dashboard', checkAuth, async (req, res) => {
     if(req.user.isManager){
         res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
-    }   else {
-        res.status(401).send({message: "Unauthorized."})
+    } else {
+        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
     }
 })
 
