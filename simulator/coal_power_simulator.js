@@ -11,14 +11,14 @@ runningProduction = async function () {
     console.log('Running production of power plant. ')
 
     const manager = await server_db_utils.getAllManagers()
-    await sim_db_utils.updateManagerProductionById(manager.id, 100)
+    await sim_db_utils.updateProductionById(manager.id, 100)
 }
 
 stoppingProduction = async function () {
     console.log('Stopping production of power plant. ')
 
     const manager = await server_db_utils.getAllManagers()
-    await sim_db_utils.updateManagerProductionById(manager.id, 0)
+    await sim_db_utils.updateProductionById(manager.id, 0)
 
 }
 

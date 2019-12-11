@@ -118,7 +118,7 @@ prosumerProduction = async function () {
             new_production = 17 - Math.random()
         }
 
-        await server_db_utils.updateProsumerProductionById(prosumer.id, new_production.toFixed(2))
+        await server_db_utils.updateProductionById(prosumer.id, new_production.toFixed(2))
     }
 }
 
@@ -142,7 +142,7 @@ prosumerConsumption = async function () {
             new_consumption = 3.7 - Math.random()
         }
 
-        await server_db_utils.updateProsumerConsumptionById(prosumer.id, new_consumption.toFixed(2))
+        await server_db_utils.updateConsumptionById(prosumer.id, new_consumption.toFixed(2))
     }
 }
 
@@ -179,12 +179,12 @@ prosumerBuffer = async function () {
             let conserve = diff * (1 - prosumer.over_production_sell)
 
             await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
-            await server_db_utils.updateProsumerBufferById(prosumer.id, (prosumer.buffer + conserve).toFixed(2))
+            await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + conserve).toFixed(2))
         }
 
         // selling with negative net production not possible atm (should not necessarily sell)
         if((prosumer.over_production_sell > 0) && (net < 0)){
-            await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
+            await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
         }
 
         // buying with negative net production
@@ -195,21 +195,21 @@ prosumerBuffer = async function () {
 
             if(prosumer.balance >= buy){
                 await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
-                await server_db_utils.updateProsumerBufferById(prosumer.id, (prosumer.buffer + bought).toFixed(2))
+                await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + bought).toFixed(2))
             } else {
                 // not enough money
-                await server_db_utils.updateProsumerUnderProductionById(prosumer.id, 0)
-                await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
+                await server_db_utils.updateUnderProductionById(prosumer.id, 0)
+                await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
             }
         }
 
         // buying with positive net production not possible atm (should not necessarily buy)
         if((prosumer.under_production_buy > 0) && (net > 0)){
-            await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
+            await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
         }
 
         if((prosumer.under_production_buy === 0) && (prosumer.over_production_sell === 0)){
-            await server_db_utils.updateProsumerBufferById(prosumer.id, new_buffer.toFixed(2))
+            await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
         }
     }
 }
