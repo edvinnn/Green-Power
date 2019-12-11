@@ -262,7 +262,7 @@ router.post('/prosumer/change_name', async (req, res) => {
         server_db_utils.getProsumerById(req.user._id).then((user) => {
             user.name = req.body.name
             user.save()
-            res.status(201).send()
+            res.status(200).redirect('/profile')
         })
     } catch (err) {
         res.status(500).send()
@@ -279,7 +279,7 @@ router.post('/prosumer/change_email', async (req, res) => {
         server_db_utils.getProsumerById(req.user._id).then((user) => {
             user.email = req.body.email
             user.save()
-            res.status(201).send()
+            res.status(200).redirect('/profile')
         })
     } catch (err) {
         res.status(500).send()
