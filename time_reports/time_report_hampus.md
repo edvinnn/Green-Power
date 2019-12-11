@@ -23,3 +23,4 @@
 | 2019-12-04  | 6       | Work progress on prosumer dashboard. Built a model for the dashboard which also provides values from the API . |
 | 2019-12-05  | 7       | Prosumer dashboard update: sliders that provides functionality to update sell and buy ratio. Did some debugging aswell. |
 | 2019-12-09  | 5       | Improvements to simulator. Fixed bugs in buffer (selling and buying). |
+| 2019-12-10  | 3       | Initialized a manager user and simulator for coal power plant. |
