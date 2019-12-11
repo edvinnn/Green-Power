@@ -24,3 +24,4 @@
 | 2019-12-05  | 7       | Prosumer dashboard update: sliders that provides functionality to update sell and buy ratio. Did some debugging aswell. |
 | 2019-12-09  | 5       | Improvements to simulator. Fixed bugs in buffer (selling and buying). |
 | 2019-12-10  | 3       | Initialized a manager user and simulator for coal power plant. |
+| 2019-12-11  | 5       | Bugfixes on buffer simulator and made prosumers and managers into one model (user) with an extra field that indicates if manager or not. Some refactoring of the code. |
