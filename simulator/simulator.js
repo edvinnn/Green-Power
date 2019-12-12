@@ -177,8 +177,6 @@ prosumerBuffer = async function () {
             if(prosumer.over_production_sell > 0){
                 let sell = diff * prosumer.over_production_sell * current_price
                 let conserve = diff * (1 - prosumer.over_production_sell)
-                console.log(sell)
-                console.log(prosumer.balance)
 
                 if(prosumer.buffer + conserve > prosumer.buffer_max){
                     await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
@@ -197,14 +195,13 @@ prosumerBuffer = async function () {
             // buying with negative net production
             if(prosumer.under_production_buy > 0){
                 let buy = -diff * prosumer.under_production_buy * current_price
-                let bought = -diff * prosumer.under_production_buy
+                let conserve = -diff * (1 - prosumer.under_production_buy)
 
                 if(prosumer.balance >= buy){
                     await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
-                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + bought).toFixed(2))
+                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer - conserve).toFixed(2))
                 } else {
                     // not enough money
-                    await server_db_utils.updateUnderProductionById(prosumer.id, 0)
                     await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
                 }
             }
@@ -222,8 +219,8 @@ async function run() {
         await currentWind()
         await consumerConsumption()
         await currentPrice()
-        //await prosumerProduction()
-        //await prosumerConsumption()
+        await prosumerProduction()
+        await prosumerConsumption()
         await prosumerBuffer()
     }, process.env.SIMULATOR_TIME)
 }
