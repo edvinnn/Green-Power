@@ -17,16 +17,18 @@
             </div>
 
             <!-- Content Row 1-->
+            <h1 class="h3 mb-4 text-primary">DEMAND</h1>
             <div class="row">
 
-                <!-- Total Demand (kWh) -->
+                <!-- Total Production (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Total demand of all households (shown in kWh)" class="card-body">
+                        <div title="Total production of all prosumers, including power plant (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Demand: </div>
-                                    <div id="total_demand" class="h5 mb-0 font-weight-bold text-gray-800">600kWh</div>
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Production:
+                                    </div>
+                                    <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800">500kWh</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-plus fa-2x text-gray-300"></i>
@@ -36,15 +38,14 @@
                     </div>
                 </div>
 
-                <!-- Total Production (kWh) -->
+                <!-- Total Consumption (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-secondary shadow h-100 py-2">
-                        <div title="Total production of all prosumers (shown in kWh)" class="card-body">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div title="Total consumption of all households, including power plant (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Total Production:
-                                    </div>
-                                    <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800">500kWh</div>
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Consumption: </div>
+                                    <div id="total_demand" class="h5 mb-0 font-weight-bold text-gray-800">600kWh</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-minus fa-2x text-gray-300"></i>
@@ -54,15 +55,15 @@
                     </div>
                 </div>
 
-                <!-- Net Production (kWh) -->
+                <!-- Demand (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div title="Current Production of the coal power plant (shown in kWh)" class="card-body">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div title="Current demand of all households, net production (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Current Coal Plant Production:
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Demand:
                                     </div>
-                                    <div id="coal_plant_prod" class="h5 mb-0 font-weight-bold text-gray-800">100kWh</div>
+                                    <div id="coal_plant_prod" class="h5 mb-0 font-weight-bold text-gray-800">-100kWh</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-grip-lines fa-2x text-gray-300"></i>
@@ -72,28 +73,18 @@
                     </div>
                 </div>
 
-                <!-- Current Buffer (%) -->
+                <!-- Wind Speed -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
-                        <div title="Electricity left in coal power plant buffer (shown in %)" class="card-body">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div title="Current wind speed (shown in m/s)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Current Coal Plant Buffer:
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Wind Speed:
                                     </div>
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col-auto">
-                                            <div id="buffer_percentage_coal_plant" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="progress progress-sm mr-2">
-                                                <div id="progress_bar" class="progress-bar bg-info" role="progressbar" style="width: 0%"
-                                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div id="wind_speed" class="h5 mb-0 font-weight-bold text-gray-800">7m/s</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-car-battery fa-2x text-gray-300"></i>
+                                    <i class="fas fa-wind fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -104,23 +95,40 @@
 
 
             <!-- Content Row 2 -->
-
+            <h1 class="h3 mb-4 text-info">PRICE</h1>
             <div class="row">
 
-                <!-- Area Chart -->
-                <div class="col-xl-8 col-lg-7">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header -->
-                        <div title="Price model (shown in m/s)" class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Price model proposal: </h6>
-                            <div class="col-auto">
-                                <i class="fas fa-wind fa-2x text-gray-300"></i>
+                <!-- Modelled/Current Price -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div title="Modelled price based on demand and wind (shown in kr/kWh)" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Modelled Price:
+                                    </div>
+                                    <div id="model_price" class="h5 mb-0 font-weight-bold text-gray-800">0.69kr</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-puzzle-piece fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
-                        <!-- Card Body -->
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <canvas id="myAreaChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Current Price -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div title="Current price on the market (shown in kr/kWh)" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Market Price:
+                                    </div>
+                                    <div id="market_price" class="h5 mb-0 font-weight-bold text-gray-800">0.8kr</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -128,16 +136,42 @@
 
                 <!-- Set Electricity Price -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Set the actual electricity price for the market (kr)" class="card-body">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div title="Set the actual electricity price for the market, you may only submit numerical numbers (kr/kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Set Electricity Price:
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Set Market Price:
                                     </div>
-                                    <div id="set_price" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                    <div id="set_price" class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <form class="form-inline">
+                                            <div class="form-group mx-sm-2 mb-2">
+                                                <label for="new_price" class="sr-only">New Price</label>
+                                                <input type="new_price" class="form-control" id="new_price" placeholder="New Price">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    <i class="fas fa-coins fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total earnings -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div title="Total earnings made by the power plant (kr)" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Earnings:
+                                    </div>
+                                    <div id="earnings" class="h5 mb-0 font-weight-bold text-gray-800">1200kr</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-wallet fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -147,56 +181,44 @@
             </div>
 
             <!-- Content Row 3 -->
+            <h1 class="h3 mb-4 text-success">PRODUCTION</h1>
             <div class="row">
 
-                <!-- Current Electricity Price -->
+                <!-- Current State -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Current price of electricity per kWh, (shown in kr)" class="card-body">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div title="Current state of power plant (starting, running or stopped)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Electricity Price:
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Status:
                                     </div>
-                                    <div id="price" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                    <div id="status_power_plant" class="h5 mb-0 font-weight-bold text-gray-800">Stopped</div>
                                 </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                <div id="circle_color" class="col-auto">
+                                    <i class="fas fa-circle fa-2x text-danger"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Balance -->
+                <!-- Start or stop production -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-secondary shadow h-100 py-2">
-                        <div title="Your current balance, (shown in kr)" class="card-body">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div title="Slide to right in order to start production" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">State of power plant?
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Start/Stop Production:
                                     </div>
-                                    <div id="state" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                    <div id="start_stop" class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-piggy-bank fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Balance -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-secondary shadow h-100 py-2">
-                        <div title="Your current balance, (shown in kr)" class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Start/Stop production?
-                                    </div>
-                                    <div id="state" class="h5 mb-0 font-weight-bold text-gray-800"></div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-piggy-bank fa-2x text-gray-300"></i>
+                                    <i class="fas fa-power-off fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +228,7 @@
                 <!-- Sell Ratio -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
+                        <div title="0 = all to buffer, 1 = sell all excessive production" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sell Ratio:
@@ -222,6 +244,71 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Current coal power buffer -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div title="Current percentage left in buffer" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Buffer:
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div id="buffer_percentage_coal_plant" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20%</div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="progress progress-sm mr-2">
+                                                <div id="progress_bar_power_plant" class="progress-bar bg-info" role="progressbar" style="width: 0%"
+                                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-car-battery fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current coal power production -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div title="Current power plant production (shown in kWh)" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Production:
+                                    </div>
+                                    <div id="plant_production" class="h5 mb-0 font-weight-bold text-gray-800">0kWh</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-plus-square fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current coal power consumption -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div title="Current power plant consumption (shown in kWh)" class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Consumption:
+                                    </div>
+                                    <div id="plant_production" class="h5 mb-0 font-weight-bold text-gray-800">0kWh</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-minus-square fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <!-- End of Main Content -->

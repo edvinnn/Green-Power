@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
-    res.render('index.ejs', {name: req.user.name})
+    res.render('profile.ejs', {user: req.user})
 })
 
 router.get('/login', checkNotAuth, async (req, res) => {

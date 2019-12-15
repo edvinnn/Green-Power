@@ -253,6 +253,40 @@ router.put('/prosumer/:id/buffer_max', async (req, res) => {
     }
 })
 
+// CHANGE USER INFO
+router.post('/prosumer/change_name', async (req, res) => {
+    if(!req.isAuthenticated()) {
+        return res.status(403).send()
+    }
+    try {
+        server_db_utils.getUserById(req.user._id).then((user) => {
+            user.name = req.body.name
+            user.save()
+            res.status(200).redirect('/profile')
+        })
+    } catch (err) {
+        res.status(500).send()
+        console.log(err)
+    }
+})
+
+// CHANGE USER INFO
+router.post('/prosumer/change_email', async (req, res) => {
+    if(!req.isAuthenticated()) {
+        return res.status(403).send()
+    }
+    try {
+        server_db_utils.getUserById(req.user._id).then((user) => {
+            user.email = req.body.email
+            user.save()
+            res.status(200).redirect('/profile')
+        })
+    } catch (err) {
+        res.status(500).send()
+        console.log(err)
+    }
+})
+
 // WINDS
 // Get 20 latest winds
 router.get('/wind', async (req, res) => {
