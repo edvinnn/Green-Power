@@ -64,6 +64,14 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     }
 })
 
+router.get('/prosumer_list', checkAuth, async (req, res) => {
+    if(req.user.isManager && req.isAuthenticated()){
+        res.render('manager-list.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+    }   else{
+        res.status(403).send({message: "Unauthorized."})
+    }
+})
+
 router.get('/logout', checkAuth, (req, res) => {
     req.logOut()
     res.redirect('/')

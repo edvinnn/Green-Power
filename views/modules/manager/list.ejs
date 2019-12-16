@@ -1,0 +1,128 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <%- include('../topbar') -%>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            </div>
+            <!-- Content Row 1-->
+            <div class="row">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">List of Prosumers</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Net Production</th>
+                                    <th>Selling to Market</th>
+                                    <th>Buying from Market</th>
+                                    <th>Buffer</th>
+                                    <th>Black out</th>
+                                    <th>Block from selling</th>
+                                    <th>Online/Offline</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Net Production</th>
+                                    <th>Selling to Market</th>
+                                    <th>Buying from Market</th>
+                                    <th>Buffer</th>
+                                    <th>Black out</th>
+                                    <th>Block from selling</th>
+                                    <th>Online/Offline</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td>Hampus</td>
+                                    <td>h@h.se</td>
+                                    <td>2 kWh</td>
+                                    <td>0.5 kWh</td>
+                                    <td>0 kWh</td>
+                                    <td>30%</td>
+                                    <td>No</td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                                            <label class="custom-control-label" for="defaultUnchecked"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-circle fa text-success"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Edvin</td>
+                                    <td>edvin@e.se</td>
+                                    <td>7 kWh</td>
+                                    <td>0.2 kWh</td>
+                                    <td>0 kWh</td>
+                                    <td>60%</td>
+                                    <td>No</td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                                            <label class="custom-control-label" for="defaultUnchecked"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-circle fa text-danger"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Hasse</td>
+                                    <td>hasse@h.se</td>
+                                    <td>-3 kWh</td>
+                                    <td>0 kWh</td>
+                                    <td>0.5 kWh</td>
+                                    <td>0%</td>
+                                    <td>Yes</td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                                            <label class="custom-control-label" for="defaultUnchecked"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-circle fa text-success"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Green Power 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+</div>
+
+<%- include('../logout_prompt'); -%>
+<!-- End of Content Wrapper -->
