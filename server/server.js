@@ -2,8 +2,6 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
 const simulator = require('../simulator/simulator')
-const sim_db_utils = require('../simulator/sim_db_utils')
-server_db_utils = require('./server_db_utils')
 const express = require('express')
 const app = express()
 const passport = require('passport')
@@ -30,6 +28,7 @@ const web_routes = require('./website/routes')
 app.use('/api', api_routes)
 app.use('/', web_routes)
 
+// Wss handling - update clients when to refresh for new dashboard data
 simulator.observable.subscribe({
     next() {
         const clients = express_websocket.getWss().clients;
