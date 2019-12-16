@@ -26,3 +26,5 @@
 | 2019-12-10  | 3       | Initialized a manager user and simulator for coal power plant. |
 | 2019-12-11  | 5       | Bugfixes on buffer simulator and made prosumers and managers into one model (user) with an extra field that indicates if manager or not. Some refactoring of the code. |
 | 2019-12-12  | 4       | Progress on manager website, introduced prosumer list. |
+| 2019-12-15  | 3       | Finished a model of the manager website frontend. |
+| 2019-12-16  | 4       | Some changes to the manager dashboard and bugfixes of simulator buffer. |
