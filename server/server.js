@@ -34,29 +34,7 @@ simulator.observable.subscribe({
     next() {
         const clients = express_websocket.getWss().clients;
         clients.forEach(client => {
-            sim_db_utils.getLatestPrice().then((price) => {
-                //electricity price (ep)
-                client.send(JSON.stringify("ep" + price))
-            });
-            sim_db_utils.getLatestWinds(24).then((winds) => {
-                //wind latest 24h (ch)
-                client.send("cu" + JSON.stringify(winds))
-            });
-            //console.log(client)
-            /*server_db_utils.getUserById(req.user._id).then((user) => {
-                //production (pr)
-                client.send(JSON.stringify("pr" + user.production))
-                //consumption (co)
-                client.send(JSON.stringify("co" + user.consumption))
-                //net (ne)
-                let net = (user.production - user.consumption).toFixed(2)
-                client.send(JSON.stringify("ne" + net))
-                //buffer percentage (bu)
-                let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
-                client.send(JSON.stringify("bu" + percentage))
-                //balance (ba)
-                client.send(JSON.stringify("ba" + user.balance))
-            })*/
+            client.send('refresh');
         });
     },
     error(err) { console.error('something wrong occurred: ' + err); },
