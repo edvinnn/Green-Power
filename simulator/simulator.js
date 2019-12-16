@@ -1,5 +1,6 @@
-const sim_db_utils = require('./sim_db_utils')
-const server_db_utils = require('../server/server_db_utils')
+const sim_db_utils = require('./sim_db_utils');
+const server_db_utils = require('../server/server_db_utils');
+const { Observable } = require('rxjs');
 
 let last_wind = 0;
 let last_consumption = 0;
@@ -35,8 +36,8 @@ currentWind = async function() {
 
     await sim_db_utils.updateWind(new_wind)
     last_wind = new_wind
-    console.log("wind speed: " + new_wind + " m/s")
 
+    return new_wind
 }
 
 consumerConsumption = async function() {
@@ -65,7 +66,7 @@ consumerConsumption = async function() {
     await sim_db_utils.updateConsumption(new_consumption)
     last_consumption = new_consumption
 
-    console.log("total consumer consumption: " + new_consumption + " kWh")
+    return new_consumption
 };
 
 currentPrice = async function(){
@@ -97,7 +98,7 @@ currentPrice = async function(){
 
     await sim_db_utils.updatePrice(current_price)
 
-    console.log("current price: " + current_price + " kr/kWh")
+    return current_price;
 }
 
 // Update all prosumers with new random production based on wind
@@ -214,16 +215,18 @@ prosumerBuffer = async function () {
     }
 }
 
-//Loops and updates database with new simulator values
-async function run() {
-    setInterval(async function(){
+const observable = new Observable(subscriber => {
+    setInterval(async () => {
         await currentWind()
         await consumerConsumption()
         await currentPrice()
         await prosumerProduction()
         await prosumerConsumption()
         await prosumerBuffer()
-    }, process.env.SIMULATOR_TIME)
-}
+        subscriber.next();
+    }, process.env.SIMULATOR_TIME);
+});
 
-run()
+module.exports = {
+    observable: observable
+}

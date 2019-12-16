@@ -6,6 +6,11 @@ const sim_db_utils = require('../../simulator/sim_db_utils')
 
 router.ws('/dashboard', function (ws, req) {
     ws.on('message', function (msg) {
+        if(msg === 'connection') {
+            console.log('New WS connection...')
+            console.log(req.user._id)
+            // Add user to session storage/hashtable
+        }
         sim_db_utils.getLatestPrice().then((price) => {
             //electricity price (ep)
             ws.send(JSON.stringify("ep" + price))
