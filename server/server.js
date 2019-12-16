@@ -1,13 +1,13 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
-require('../simulator/simulator')
+const simulator = require('../simulator/simulator')
 const express = require('express')
 const app = express()
-const express_websocket = require('express-ws')(app);
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+const express_websocket = require('express-ws')(app);
 
 app.use(express.static('green-power-public'))
 app.use(express.json())
@@ -28,13 +28,16 @@ const web_routes = require('./website/routes')
 app.use('/api', api_routes)
 app.use('/', web_routes)
 
-app.get('/test', function (req, res, next) {
-    const clients = express_websocket.getWss().clients;
-    clients.forEach(client => {
-        console.log("C")
-    });
-    //console.log(expressWs.getWss().clients);
-    res.end();
+// Wss handling - update clients when to refresh for new dashboard data
+simulator.observable.subscribe({
+    next() {
+        const clients = express_websocket.getWss().clients;
+        clients.forEach(client => {
+            client.send('refresh');
+        });
+    },
+    error(err) { console.error('something wrong occurred: ' + err); },
+    complete() { console.log('done'); }
 });
 
 app.listen(3000, () => console.log('server started'))

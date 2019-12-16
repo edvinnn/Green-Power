@@ -6,28 +6,31 @@ const sim_db_utils = require('../../simulator/sim_db_utils')
 
 router.ws('/dashboard', function (ws, req) {
     ws.on('message', function (msg) {
-        sim_db_utils.getLatestPrice().then((price) => {
-            //electricity price (ep)
-            ws.send(JSON.stringify("ep" + price))
-        });
-        sim_db_utils.getLatestWinds(24).then((winds) => {
-            //wind latest 24h (ch)
-            ws.send("ch" + JSON.stringify(winds))
-        });
-        server_db_utils.getUserById(req.user._id).then((user) => {
-            //production (pr)
-            ws.send(JSON.stringify("pr" + user.production))
-            //consumption (co)
-            ws.send(JSON.stringify("co" + user.consumption))
-            //net (ne)
-            let net = (user.production - user.consumption).toFixed(2)
-            ws.send(JSON.stringify("ne" + net))
-            //buffer percentage (bu)
-            let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
-            ws.send(JSON.stringify("bu" + percentage))
-            //balance (ba)
-            ws.send(JSON.stringify("ba" + user.balance))
-        });
+        if(msg === 'request_prosumer_dashboard_data') {
+            // Push latest data to client
+            sim_db_utils.getLatestPrice().then((price) => {
+                //electricity price (ep)
+                ws.send(JSON.stringify("ep" + price))
+            });
+            sim_db_utils.getLatestWinds(24).then((winds) => {
+                //wind latest 24h (ch)
+                ws.send("ch" + JSON.stringify(winds))
+            });
+            server_db_utils.getUserById(req.user._id).then((user) => {
+                //production (pr)
+                ws.send(JSON.stringify("pr" + user.production))
+                //consumption (co)
+                ws.send(JSON.stringify("co" + user.consumption))
+                //net (ne)
+                let net = (user.production - user.consumption).toFixed(2)
+                ws.send(JSON.stringify("ne" + net))
+                //buffer percentage (bu)
+                let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
+                ws.send(JSON.stringify("bu" + percentage))
+                //balance (ba)
+                ws.send(JSON.stringify("ba" + user.balance))
+            });
+        }
     });
 });
 

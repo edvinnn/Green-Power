@@ -75,5 +75,6 @@ module.exports = {
     updateUnderProductionById: updateUnderProductionById,
     updateOverProductionById: updateOverProductionById,
     getAllManagers: getAllManagers,
-    getAllUsers: getAllUsers
+    getAllUsers: getAllUsers,
+    model: Model
 }
