@@ -31,7 +31,7 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const user = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, false)
+        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false)
         if(user != null) {
             res.redirect('/login')
         } else {

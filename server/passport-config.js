@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 function initialize(passport, getUserByMail, getUserById) {
 
     const authenticateUser = async (email, password, done) => {
-        const users = await getUserByMail(email)
+        const users = await getUserByMail(email.toLowerCase())
         let counter = 0
         for(const user of users) {
             counter++
