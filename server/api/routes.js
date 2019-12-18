@@ -31,6 +31,41 @@ router.ws('/dashboard', function (ws, req) {
                 ws.send(JSON.stringify("ba" + user.balance))
             });
         }
+        // manager dashboard
+        if(msg === 'request_manager_dashboard_data'){
+            server_db_utils.getAllUsers().then((users) => {
+
+                // total production of system
+                let total_production = 0
+                users.forEach(user => {
+                    if(user.production >= user.consumption){
+                        total_production += user.production * user.over_production_sell
+                    }
+                });
+                ws.send(JSON.stringify("pr" + total_production.toFixed(2)))
+
+                // total consumption
+                let total_consumption = 0
+                sim_db_utils.getLatestConsumption().then(consumption => {
+                    users.forEach(user => {
+                        if(user.production <= user.consumption) {
+                            consumption += user.consumption * user.under_production_buy
+                        }
+                    });
+                    total_consumption = consumption
+                    ws.send(JSON.stringify("co" + total_consumption.toFixed(2)))
+
+                    // demand (net)
+                    let demand = total_production - total_consumption
+                    ws.send(JSON.stringify("de" + demand.toFixed(2)))
+                })
+
+                // latest wind
+                sim_db_utils.getLatestWind().then(wind => {
+                    ws.send(JSON.stringify("wi" + wind.toFixed(2)))
+                })
+            })
+        }
     });
 });
 
