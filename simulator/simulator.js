@@ -200,7 +200,7 @@ prosumerBuffer = async function () {
                 let conserve = -diff * (1 - prosumer.under_production_buy)
 
                 if(prosumer.balance >= buy){
-                    if(prosumer.buffer - buy < 0){
+                    if(prosumer.buffer - conserve < 0){
                         await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
                         await server_db_utils.updateBufferById(prosumer.id, 0)
                     }
