@@ -28,3 +28,4 @@
 | 2019-12-12  | 4       | Progress on manager website, introduced prosumer list. |
 | 2019-12-15  | 3       | Finished a model of the manager website frontend. |
 | 2019-12-16  | 4       | Some changes to the manager dashboard and bugfixes of simulator buffer. |
+| 2019-12-18  | 4       | Set up issues for manager website backend. Finished the demand section of the manager dashboard backend. Also solved a small bug. |
