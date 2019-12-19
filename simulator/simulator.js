@@ -201,7 +201,6 @@ prosumerBuffer = async function () {
 
                 if(prosumer.balance >= buy){
                     if(prosumer.buffer - conserve < 0){
-                        if(prosumer.buffer - conserve< 0){
                         await server_db_utils.updateBufferById(prosumer.id, 0)
                     }
                     else {
