@@ -23,12 +23,12 @@
                 <!-- Total Production (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Total production of all prosumers, including power plant (shown in kWh)" class="card-body">
+                        <div title="Total production of all prosumers selling to market, including power plant (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Production:
                                     </div>
-                                    <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800">500kWh</div>
+                                    <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-plus fa-2x text-gray-300"></i>
@@ -41,11 +41,11 @@
                 <!-- Total Consumption (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Total consumption of all households, including power plant (shown in kWh)" class="card-body">
+                        <div title="Total consumption of all households and prosumers buying, including power plant (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Consumption: </div>
-                                    <div id="total_demand" class="h5 mb-0 font-weight-bold text-gray-800">600kWh</div>
+                                    <div id="total_consumption" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-minus fa-2x text-gray-300"></i>
@@ -58,12 +58,12 @@
                 <!-- Demand (kWh) -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
-                        <div title="Current demand of all households, net production (shown in kWh)" class="card-body">
+                        <div title="Current demand of all households and prosumers, net production (shown in kWh)" class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Demand:
                                     </div>
-                                    <div id="coal_plant_prod" class="h5 mb-0 font-weight-bold text-gray-800">-100kWh</div>
+                                    <div id="demand" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-grip-lines fa-2x text-gray-300"></i>
@@ -81,7 +81,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Wind Speed:
                                     </div>
-                                    <div id="wind_speed" class="h5 mb-0 font-weight-bold text-gray-800">7m/s</div>
+                                    <div id="wind" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-wind fa-2x text-gray-300"></i>
@@ -327,3 +327,6 @@
 
 <%- include('../logout_prompt'); -%>
 <!-- End of Content Wrapper -->
+
+<!-- Page level custom scripts -->
+<%- include('dashboard_scripts'); -%>
