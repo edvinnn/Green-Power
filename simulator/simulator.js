@@ -181,6 +181,7 @@ prosumerBuffer = async function () {
 
                 if(prosumer.buffer + conserve > prosumer.buffer_max){
                     await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer_max).toFixed(2))
                 }
                 else {
                     await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
@@ -199,8 +200,13 @@ prosumerBuffer = async function () {
                 let conserve = -diff * (1 - prosumer.under_production_buy)
 
                 if(prosumer.balance >= buy){
-                    await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
-                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer - conserve).toFixed(2))
+                    if(prosumer.buffer - conserve < 0){
+                        await server_db_utils.updateBufferById(prosumer.id, 0)
+                    }
+                    else {
+                        await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
+                        await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer - conserve).toFixed(2))
+                    }
                 } else {
                     // not enough money
                     await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
