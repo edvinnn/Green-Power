@@ -64,6 +64,16 @@ router.ws('/dashboard', function (ws, req) {
                 sim_db_utils.getLatestWind().then(wind => {
                     ws.send(JSON.stringify("wi" + wind.toFixed(2)))
                 })
+
+                // modelled price
+                sim_db_utils.getLatestModelledPrice().then(price => {
+                    ws.send(JSON.stringify("mp" + price.toFixed(2)))
+                })
+
+                // actual price (market price)
+                sim_db_utils.getLatestPrice().then(price => {
+                    ws.send(JSON.stringify("ap" + price))
+                })
             })
         }
     });

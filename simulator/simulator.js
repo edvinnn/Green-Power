@@ -69,7 +69,7 @@ consumerConsumption = async function() {
     return new_consumption
 };
 
-currentPrice = async function(){
+modelledPrice = async function(){
 
     // Simple linear function for price based on wind
     let max_wind = 50
@@ -94,11 +94,11 @@ currentPrice = async function(){
         consumption_price = consumption_per_household / 10
     }
 
-    const current_price = (wind_price + consumption_price).toFixed(2)
+    const modelled_price = (wind_price + consumption_price).toFixed(2)
 
-    await sim_db_utils.updatePrice(current_price)
+    await sim_db_utils.updateModelledPrice(modelled_price)
 
-    return current_price;
+    return modelled_price;
 }
 
 // Update all prosumers with new random production based on wind
@@ -224,7 +224,7 @@ const observable = new Observable(subscriber => {
     setInterval(async () => {
         await currentWind()
         await consumerConsumption()
-        await currentPrice()
+        await modelledPrice()
         await prosumerProduction()
         await prosumerConsumption()
         await prosumerBuffer()
