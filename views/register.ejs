@@ -17,7 +17,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
-                            <form class="user" action="/register" method="POST">
+                            <form id="register-form" class="user" action="/register" method="POST">
                                 <div class="form-group">
                                     <input type="name" class="form-control form-control-user" id="name" name="name"
                                         placeholder="Full name">
@@ -28,15 +28,15 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user" id="password" name="password"
-                                            placeholder="Password">
+                                        <input type="password" class="form-control form-control-user" id="password"
+                                            name="password" placeholder="Password">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
                                             id="passwordRepeat" name="passwordRepeat" placeholder="Repeat Password">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">Register
+                                <button onclick="submitForm()" type="button" class="btn btn-primary btn-user btn-block">Register
                                     Account</button>
                             </form>
                             <hr>
@@ -63,6 +63,35 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/green-power.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#passwordRepeat").keyup(validate);
+        });
+
+        // This function can be used to provide user with live feedback on passwords
+        function validate() {
+            var password1 = $("#password").val();
+            var password2 = $("#passwordRepeat").val();
+
+            if (password1 == password2) {
+                // TODO
+            }
+            else {
+                // TODO
+            }
+        }
+
+        // Compare passwords and submit form only when they match
+        function submitForm() {
+            if ($("#password").val() == $("#passwordRepeat").val()){
+                console.log("Password OK!")
+                document.getElementById("register-form").submit();
+            } else {
+                alert("Passwords did not match! Try again.");
+            }
+        }
+    </script>
 
 </body>
 
