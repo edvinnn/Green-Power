@@ -74,6 +74,12 @@ router.ws('/dashboard', function (ws, req) {
                 sim_db_utils.getLatestPrice().then(price => {
                     ws.send(JSON.stringify("ap" + price))
                 })
+
+                server_db_utils.getUserById(req.user._id).then((user) => {
+
+                    // earnings (balance)
+                    ws.send(JSON.stringify("ea" + user.balance))
+                })
             })
         }
     });
@@ -234,6 +240,21 @@ router.get('/prosumer/:id/buy_ratio', checkAuth, async(req, res) => {
         try {
             server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.under_production_buy)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+// UPDATING NEW PRICE
+router.put('/manager/:id/new_price/:price', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            sim_db_utils.updatePrice(Number(req.params.price)).then(() => {
+                res.status(200).send()
             })
         } catch (err) {
             res.status(500).json({message: "Serverside error."})
