@@ -30,3 +30,4 @@
 | 2019-12-16  | 4       | Some changes to the manager dashboard and bugfixes of simulator buffer. |
 | 2019-12-18  | 4       | Set up issues for manager website backend. Finished the demand section of the manager dashboard backend. Also solved a small bug. |
 | 2019-12-19  | 3       | Fixed some conflicts and started on the price panel of manager dashboard. |
+| 2019-12-21  | 2       | Finished the price panel of manager dashboard. (Set new market price and earnings) |
