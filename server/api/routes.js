@@ -3,6 +3,7 @@ const router = express.Router()
 var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
+let prod_timer = null;
 
 router.ws('/dashboard', function (ws, req) {
     ws.on('message', function (msg) {
@@ -76,9 +77,26 @@ router.ws('/dashboard', function (ws, req) {
                 })
 
                 server_db_utils.getUserById(req.user._id).then((user) => {
+                    if(user.production_on_off == 0){
+                        ws.send(JSON.stringify("st" + "Stopped"))
+                    } else if(user.production_on_off == 1 && user.production == 0){
+                        ws.send(JSON.stringify("st" + "Starting"))
+                    } else{
+                        ws.send(JSON.stringify("st" + "Running"))
+                    }
 
                     // earnings (balance)
                     ws.send(JSON.stringify("ea" + user.balance))
+
+                    // plant buffer percentage (pb)
+                    let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
+                    ws.send(JSON.stringify("pb" + percentage))
+
+                    // plant production (pp)
+                    ws.send(JSON.stringify("pp" + user.production))
+
+                    // plant consumption (pc)
+                    ws.send(JSON.stringify("pc" + user.consumption))
                 })
             })
         }
@@ -207,6 +225,20 @@ router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
+router.put('/manager/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
+                res.status(200).send()
+            });
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
 router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
@@ -221,11 +253,75 @@ router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
+router.put('/manager/:id/production_on_off/:value/', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            if(req.params.value == 1){
+                server_db_utils.updateOnOffById(req.params.id,true).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateConsumptionById(req.params.id,  process.env.PLANT_CONSUMPTION).then(() => {
+                    res.status(200).send()
+                });
+                prod_timer = setTimeout(function(){prod_started(req.params.id, process.env.PLANT_PRODUCTION)},30000)
+            } else if (req.params.value == 0){
+                clearTimeout(prod_timer)
+                prod_timer = null
+                server_db_utils.updateOnOffById(req.params.id,false).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateConsumptionById(req.params.id,  0).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateProductionById(req.params.id,  0).then(() => {
+                    res.status(200).send()
+                });
+            }
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+async function prod_started(manager_id, production){
+    await server_db_utils.updateProductionById(manager_id,  production)
+}
+
+router.get('/manager/:id/production_on_off', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getUserById(req.params.id).then((manager) => {
+                res.status(200).json(manager.production_on_off)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+})
+
 router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
             server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.over_production_sell)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+})
+
+router.get('/manager/:id/sell_ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getUserById(req.params.id).then((manager) => {
+                res.status(200).json(manager.over_production_sell)
             })
         } catch (err) {
             res.status(500).json({message: "Serverside error."})
