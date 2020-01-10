@@ -32,3 +32,5 @@
 | 2019-12-19  | 3       | Fixed some conflicts and started on the price panel of manager dashboard. |
 | 2019-12-21  | 2       | Finished the price panel of manager dashboard. (Set new market price and earnings) |
 | 2020-01-09  | 6       | Manager production panel almost finished. Introduced start/stop production for manager. |
+| 2020-01-10  | 2       | Finished production panel of manager dashboard. Now buffer is updated for managers aswell as for prosumers. |
+
