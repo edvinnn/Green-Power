@@ -56,12 +56,13 @@ updateOnOffById = async function (id, production_on_off) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
 }
 
-registerNewUser = async function(name, email, hashed_password, isManager) {
+registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
         email: email,
         password: hashed_password,
-        isManager: isManager
+        isManager: isManager,
+        buffer_max: buffer_max
     })
     await user.save()
     return user

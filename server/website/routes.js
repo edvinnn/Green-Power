@@ -31,7 +31,7 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false)
+        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
         if(user != null) {
             res.redirect('/login')
         } else {
@@ -45,7 +45,7 @@ router.post('/register', async (req, res) => {
 router.post('/register/manager', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const manager = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, true)
+        const manager = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, true, 1000)
         if(manager != null) {
             res.redirect('/login')
         } else {
