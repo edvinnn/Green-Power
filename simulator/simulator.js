@@ -4,9 +4,7 @@ const { Observable } = require('rxjs');
 
 let last_wind = 0;
 let last_consumption = 0;
-
-// Number of consumers (households) within the system
-let households = 1000;
+let households = process.env.HOUSEHOLDS
 
 currentWind = async function() {
     // fetch previous value
@@ -148,23 +146,23 @@ prosumerConsumption = async function () {
 }
 
 // updates buffer based on net production
-prosumerBuffer = async function () {
+userBuffer = async function () {
 
-    const prosumers = await server_db_utils.getAllProsumers()
-    for(const prosumer of prosumers){
+    const users = await server_db_utils.getAllUsers()
+    for(const user of users){
 
         // net production
-        let net = prosumer.production - prosumer.consumption
+        let net = user.production - user.consumption
 
         // update buffer based on net production model
         let buffer_model = (net / 10)
 
-        let new_buffer = prosumer.buffer + buffer_model
+        let new_buffer = user.buffer + buffer_model
 
-        let diff = new_buffer - prosumer.buffer
+        let diff = new_buffer - user.buffer
 
-        if (new_buffer > prosumer.buffer_max){
-            new_buffer = prosumer.buffer_max
+        if (new_buffer > user.buffer_max){
+            new_buffer = user.buffer_max
         }
 
         if(new_buffer < 0) {
@@ -175,46 +173,46 @@ prosumerBuffer = async function () {
 
         if(net > 0){
             // selling with positive net production
-            if(prosumer.over_production_sell > 0){
-                let sell = diff * prosumer.over_production_sell * current_price
-                let conserve = diff * (1 - prosumer.over_production_sell)
+            if(user.over_production_sell > 0){
+                let sell = diff * user.over_production_sell * current_price
+                let conserve = diff * (1 - user.over_production_sell)
 
-                if(prosumer.buffer + conserve > prosumer.buffer_max){
-                    await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
-                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer_max).toFixed(2))
+                if(user.buffer + conserve > user.buffer_max){
+                    await server_db_utils.updateBalanceById(user.id, (user.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(user.id, (user.buffer_max).toFixed(2))
                 }
                 else {
-                    await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance + sell).toFixed(2))
-                    await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer + conserve).toFixed(2))
+                    await server_db_utils.updateBalanceById(user.id, (user.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(user.id, (user.buffer + conserve).toFixed(2))
                 }
             }
             // buying with positive net production not possible atm (should not necessarily buy) or if both sliders set to 0
             else{
-                await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
+                await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
             }
         }
         else {
             // buying with negative net production
-            if(prosumer.under_production_buy > 0){
-                let buy = -diff * prosumer.under_production_buy * current_price
-                let conserve = -diff * (1 - prosumer.under_production_buy)
+            if(user.under_production_buy > 0){
+                let buy = -diff * user.under_production_buy * current_price
+                let conserve = -diff * (1 - user.under_production_buy)
 
-                if(prosumer.balance >= buy){
-                    if(prosumer.buffer - conserve < 0){
-                        await server_db_utils.updateBufferById(prosumer.id, 0)
+                if(user.balance >= buy){
+                    if(user.buffer - conserve < 0){
+                        await server_db_utils.updateBufferById(user.id, 0)
                     }
                     else {
-                        await server_db_utils.updateBalanceById(prosumer.id, (prosumer.balance - buy).toFixed(2))
-                        await server_db_utils.updateBufferById(prosumer.id, (prosumer.buffer - conserve).toFixed(2))
+                        await server_db_utils.updateBalanceById(user.id, (user.balance - buy).toFixed(2))
+                        await server_db_utils.updateBufferById(user.id, (user.buffer - conserve).toFixed(2))
                     }
                 } else {
                     // not enough money
-                    await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
+                    await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
                 }
             }
             // selling with negative net production not possible atm (should not necessarily sell) or if both sliders set to 0
             else{
-                await server_db_utils.updateBufferById(prosumer.id, new_buffer.toFixed(2))
+                await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
             }
         }
     }
@@ -227,7 +225,7 @@ const observable = new Observable(subscriber => {
         await modelledPrice()
         await prosumerProduction()
         await prosumerConsumption()
-        await prosumerBuffer()
+        await userBuffer()
         subscriber.next();
     }, process.env.SIMULATOR_TIME);
 });

@@ -52,12 +52,17 @@ updateBalanceById = async function(id, new_balance){
     return await Model.User.findOneAndUpdate({"_id": id}, {"balance": new_balance}).exec()
 }
 
-registerNewUser = async function(name, email, hashed_password, isManager) {
+updateOnOffById = async function (id, production_on_off) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
+}
+
+registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
         email: email,
         password: hashed_password,
-        isManager: isManager
+        isManager: isManager,
+        buffer_max: buffer_max
     })
     await user.save()
     return user
@@ -76,5 +81,6 @@ module.exports = {
     updateOverProductionById: updateOverProductionById,
     getAllManagers: getAllManagers,
     getAllUsers: getAllUsers,
+    updateOnOffById: updateOnOffById,
     model: Model
 }

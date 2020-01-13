@@ -64,6 +64,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    production_on_off: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 

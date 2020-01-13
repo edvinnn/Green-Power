@@ -192,10 +192,10 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Status:
                                     </div>
-                                    <div id="status_power_plant" class="h5 mb-0 font-weight-bold text-gray-800">Stopped</div>
+                                    <div id="status_power_plant" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
-                                <div id="circle_color" class="col-auto">
-                                    <i class="fas fa-circle fa-2x text-danger"></i>
+                                <div class="col-auto">
+                                    <i id="circle_color" class=""></i>
                                 </div>
                             </div>
                         </div>
@@ -210,9 +210,9 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Start/Stop Production:
                                     </div>
-                                    <div id="start_stop" class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
                                         <label class="switch">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="start_stop" onclick="send_start_stop()">
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
@@ -234,7 +234,7 @@
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sell Ratio:
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        <input id="sell_slider" onchange="send_sell_value()" type="range" class="custom-range" min="0" max="1" value="0" step="0.01">
+                                        <input id="sell_slider_manager" onchange="send_sell_value()" type="range" class="custom-range" min="0" max="1" value="0" step="0.01">
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -255,11 +255,11 @@
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <div id="buffer_percentage_coal_plant" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20%</div>
+                                            <div id="plant_buffer" class="h5 mb-0 mr-3 font-weight-bold text-gray-800"></div>
                                         </div>
                                         <div class="col">
                                             <div class="progress progress-sm mr-2">
-                                                <div id="progress_bar_power_plant" class="progress-bar bg-info" role="progressbar" style="width: 0%"
+                                                <div id="plant_progress_bar" class="progress-bar bg-info" role="progressbar" style="width: 0%"
                                                      aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
@@ -281,7 +281,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Production:
                                     </div>
-                                    <div id="plant_production" class="h5 mb-0 font-weight-bold text-gray-800">0kWh</div>
+                                    <div id="plant_production" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-plus-square fa-2x text-gray-300"></i>
@@ -299,7 +299,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Power Plant Consumption:
                                     </div>
-                                    <div id="plant_production" class="h5 mb-0 font-weight-bold text-gray-800">0kWh</div>
+                                    <div id="plant_consumption" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-minus-square fa-2x text-gray-300"></i>
