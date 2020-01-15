@@ -58,10 +58,11 @@ router.post('/register/manager', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
+    let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
     if(req.user.isManager){
-        res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     } else {
-        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     }
 })
 
