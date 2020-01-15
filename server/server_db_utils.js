@@ -8,6 +8,22 @@ initializePassport(
     id => Model.User.findById(id).exec()
 )
 
+uploadUserImage = async function(image, userId) {
+    let oldEntry = await Model.Picture.findOneAndUpdate({"user": userId}, {"user": userId, "imageUrl": image});
+    if(oldEntry == null){
+        let picture =  new Model.Picture({
+            imageUrl: image,
+            user: userId
+        });
+        await picture.save();
+        return;
+    }
+}
+
+retriveUserHouseImage = async function(userId) {
+    return await Model.Picture.find({user: userId}).exec()
+}
+
 updateConsumptionById = async function(id, consumption) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"consumption": consumption}).exec()
 }
@@ -82,5 +98,7 @@ module.exports = {
     getAllManagers: getAllManagers,
     getAllUsers: getAllUsers,
     updateOnOffById: updateOnOffById,
-    model: Model
+    model: Model,
+    uploadUserImage: uploadUserImage,
+    retriveUserHouseImage, retriveUserHouseImage
 }

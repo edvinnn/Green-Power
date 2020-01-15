@@ -3,6 +3,14 @@ const router = express.Router()
 var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
+const multer = require('multer');
+var storage = multer.diskStorage({
+    destination: './user_uploads/',
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + req.user.name + '-' + file.originalname)
+    }
+});
+const upload = multer({ storage: storage })
 let prod_timer = null;
 
 router.ws('/dashboard', function (ws, req) {
@@ -100,6 +108,12 @@ router.ws('/dashboard', function (ws, req) {
                 })
             })
         }
+    });
+});
+
+router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, res, next){
+    server_db_utils.uploadUserImage(req.file.path, req.user._id).then(() => {
+        return res.status(200).redirect('/profile')
     });
 });
 
