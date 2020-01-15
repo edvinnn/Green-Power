@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const Model = require('./model')
 const passport = require('passport')
 const initializePassport = require('./passport-config')
@@ -16,12 +19,17 @@ uploadUserImage = async function(image, userId) {
             user: userId
         });
         await picture.save();
-        return;
-    }
+    };
 }
 
 retriveUserHouseImage = async function(userId) {
-    return await Model.Picture.find({user: userId}).exec()
+    return await Model.Picture.findOne({user: userId}).exec().then(picture => {
+        if (picture == null) {
+            return "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2255&q=80"
+        } else {
+            return process.env.SERVER_ROOT_ADDRESS + picture.imageUrl
+        }
+    })
 }
 
 updateConsumptionById = async function(id, consumption) {
