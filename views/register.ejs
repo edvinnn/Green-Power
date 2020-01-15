@@ -64,35 +64,7 @@
     <!-- Custom scripts for all pages-->
     <script src="js/green-power.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $("#passwordRepeat").keyup(validate);
-        });
-
-        // This function can be used to provide user with live feedback on passwords
-        function validate() {
-            var password1 = $("#password").val();
-            var password2 = $("#passwordRepeat").val();
-
-            if (password1 == password2) {
-                // TODO
-            }
-            else {
-                // TODO
-            }
-        }
-
-        // Compare passwords and submit form only when they match
-        function submitForm() {
-            if ($("#password").val() == $("#passwordRepeat").val()){
-                console.log("Password OK!")
-                document.getElementById("register-form").submit();
-            } else {
-                alert("Passwords did not match! Try again.");
-            }
-        }
-    </script>
-
+    <%- include('modules/form_checking_scripts'); -%>
 </body>
 
 </html>
