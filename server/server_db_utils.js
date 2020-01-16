@@ -84,6 +84,32 @@ updateUserPasswordById = async function (id, password) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"password": password}).exec()
 }
 
+setProsumerBlackoutFlag = async function (id) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"blackout": true}).exec()
+}
+
+removeProsumerBlackoutFlag = async function (id) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"blackout": false}).exec()
+}
+
+addToManagerBufferById = async function (id, amount) {
+    const manager = await Model.User.findById(id);
+    const new_buffer = manager.buffer + amount
+    if (new_buffer > manager.buffer_max) {
+        return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": manager.buffer_max})
+    }
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": new_buffer});
+}
+
+takeFromManagerBufferById = async function (id, amount) {
+    const manager = await Model.User.findById(id);
+    const new_buffer = manager.buffer - amount
+    if (new_buffer < 0) {
+        return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": 0})
+    }
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": new_buffer});
+}
+
 registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
@@ -113,5 +139,9 @@ module.exports = {
     model: Model,
     uploadUserImage: uploadUserImage,
     retriveUserHouseImage, retriveUserHouseImage,
-    updateUserPasswordById, updateUserPasswordById
+    updateUserPasswordById, updateUserPasswordById,
+    addToManagerBufferById, addToManagerBufferById,
+    takeFromManagerBufferById, takeFromManagerBufferById,
+    setProsumerBlackoutFlag, setProsumerBlackoutFlag,
+    removeProsumerBlackoutFlag, removeProsumerBlackoutFlag
 }
