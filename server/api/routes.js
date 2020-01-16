@@ -3,6 +3,7 @@ const router = express.Router()
 var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
+const bcrypt = require('bcrypt')
 const multer = require('multer');
 var storage = multer.diskStorage({
     destination: './user_uploads/',
@@ -471,8 +472,10 @@ router.post('/change_password', async (req, res) => {
         return res.status(403).send();
     }
     try {
-        // TODO
-        res.status(200).redirect('/profile')
+        const hashed_pwd = await bcrypt.hash(req.body.password1, 10)
+        server_db_utils.updateUserPasswordById(req.user._id, hashed_pwd).then(() => {
+            res.status(200).redirect('/profile')
+        });
     } catch (err) {
         res.status(500).send()
         console.log(err)
