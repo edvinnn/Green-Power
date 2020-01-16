@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
-    res.render('profile.ejs', {user: req.user})
+    let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
+    res.render('profile.ejs', {user: req.user, image: pictureUrl})
 })
 
 router.get('/login', checkNotAuth, async (req, res) => {
@@ -31,7 +32,7 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false)
+        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
         if(user != null) {
             res.redirect('/login')
         } else {
@@ -45,7 +46,7 @@ router.post('/register', async (req, res) => {
 router.post('/register/manager', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const manager = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, true)
+        const manager = server_db_utils.registerNewUser(req.body.name, req.body.email, hashed_pwd, true, 1000)
         if(manager != null) {
             res.redirect('/login')
         } else {
@@ -57,10 +58,11 @@ router.post('/register/manager', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
+    let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
     if(req.user.isManager){
-        res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     } else {
-        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     }
 })
 

@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const Model = require('./model')
 const passport = require('passport')
 const initializePassport = require('./passport-config')
@@ -7,6 +10,27 @@ initializePassport(
     email => Model.User.find({email: email}).exec(),
     id => Model.User.findById(id).exec()
 )
+
+uploadUserImage = async function(image, userId) {
+    let oldEntry = await Model.Picture.findOneAndUpdate({"user": userId}, {"user": userId, "imageUrl": image});
+    if(oldEntry == null){
+        let picture =  new Model.Picture({
+            imageUrl: image,
+            user: userId
+        });
+        await picture.save();
+    };
+}
+
+retriveUserHouseImage = async function(userId) {
+    return await Model.Picture.findOne({user: userId}).exec().then(picture => {
+        if (picture == null) {
+            return "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2255&q=80"
+        } else {
+            return process.env.SERVER_ROOT_ADDRESS + picture.imageUrl
+        }
+    })
+}
 
 updateConsumptionById = async function(id, consumption) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"consumption": consumption}).exec()
@@ -52,12 +76,17 @@ updateBalanceById = async function(id, new_balance){
     return await Model.User.findOneAndUpdate({"_id": id}, {"balance": new_balance}).exec()
 }
 
-registerNewUser = async function(name, email, hashed_password, isManager) {
+updateOnOffById = async function (id, production_on_off) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
+}
+
+registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
         email: email,
         password: hashed_password,
-        isManager: isManager
+        isManager: isManager,
+        buffer_max: buffer_max
     })
     await user.save()
     return user
@@ -76,5 +105,8 @@ module.exports = {
     updateOverProductionById: updateOverProductionById,
     getAllManagers: getAllManagers,
     getAllUsers: getAllUsers,
-    model: Model
+    updateOnOffById: updateOnOffById,
+    model: Model,
+    uploadUserImage: uploadUserImage,
+    retriveUserHouseImage, retriveUserHouseImage
 }

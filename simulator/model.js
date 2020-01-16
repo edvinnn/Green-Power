@@ -34,12 +34,22 @@ const priceSchema = new mongoose.Schema({
     }
 })
 
+const modelPriceSchema = new mongoose.Schema({
+    price: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+})
+
 let Wind = simulator_connection.model('Wind', windSchema, 'winds');
 let Consumer = simulator_connection.model('Consumer', consumerSchema, 'consumers');
 let Price = simulator_connection.model('Price', priceSchema, 'prices')
+let ModelPrice = simulator_connection.model('ModelPrice', modelPriceSchema, 'modelled_prices')
 
 module.exports = {
     Wind: Wind,
     Consumer: Consumer,
-    Price: Price
+    Price: Price,
+    ModelPrice: ModelPrice
 }

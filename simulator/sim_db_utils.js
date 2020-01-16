@@ -46,15 +46,26 @@ updateConsumption = async function (new_consumption) {
     });
 }
 
-getLatestPrice = async function () {
-    return Model.Price.find().sort({_id:-1}).limit(1).exec().then((price) => {
+getLatestModelledPrice = async function () {
+    return Model.ModelPrice.find().sort({_id:-1}).limit(1).exec().then((price) => {
         return price[0].price
     })
 }
 
-getLatestPrices = async function (quantity) {
-    return Model.Price.find().sort({_id: -1}).limit(quantity).exec().then((prices) => {
-        return prices
+updateModelledPrice = async function (current_price) {
+    const newPrice = new Model.ModelPrice({
+        price: current_price
+    })
+    newPrice.save(function (err) {
+        if (err) {
+            console.log(err)
+        }
+    })
+}
+
+getLatestPrice = async function () {
+    return Model.Price.find().sort({_id:-1}).limit(1).exec().then((price) => {
+        return price[0].price
     })
 }
 
@@ -77,6 +88,7 @@ module.exports = {
     getLatestConsumptions: getLatestConsumptions,
     updateConsumption: updateConsumption,
     getLatestPrice: getLatestPrice,
-    getLatestPrices: getLatestPrices,
     updatePrice: updatePrice,
+    getLatestModelledPrice: getLatestModelledPrice,
+    updateModelledPrice: updateModelledPrice
 }

@@ -3,6 +3,15 @@ const router = express.Router()
 var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
+const multer = require('multer');
+var storage = multer.diskStorage({
+    destination: './user_uploads/',
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+const upload = multer({ storage: storage })
+let prod_timer = null;
 
 router.ws('/dashboard', function (ws, req) {
     ws.on('message', function (msg) {
@@ -31,6 +40,80 @@ router.ws('/dashboard', function (ws, req) {
                 ws.send(JSON.stringify("ba" + user.balance))
             });
         }
+        // manager dashboard
+        if(msg === 'request_manager_dashboard_data'){
+            server_db_utils.getAllUsers().then((users) => {
+
+                // total production of system
+                let total_production = 0
+                users.forEach(user => {
+                    if(user.production >= user.consumption){
+                        total_production += user.production * user.over_production_sell
+                    }
+                });
+                ws.send(JSON.stringify("pr" + total_production.toFixed(2)))
+
+                // total consumption
+                let total_consumption = 0
+                sim_db_utils.getLatestConsumption().then(consumption => {
+                    users.forEach(user => {
+                        if(user.production <= user.consumption) {
+                            consumption += user.consumption * user.under_production_buy
+                        }
+                    });
+                    total_consumption = consumption
+                    ws.send(JSON.stringify("co" + total_consumption.toFixed(2)))
+
+                    // demand (net)
+                    let demand = total_production - total_consumption
+                    ws.send(JSON.stringify("de" + demand.toFixed(2)))
+                })
+
+                // latest wind
+                sim_db_utils.getLatestWind().then(wind => {
+                    ws.send(JSON.stringify("wi" + wind.toFixed(2)))
+                })
+
+                // modelled price
+                sim_db_utils.getLatestModelledPrice().then(price => {
+                    ws.send(JSON.stringify("mp" + price.toFixed(2)))
+                })
+
+                // actual price (market price)
+                sim_db_utils.getLatestPrice().then(price => {
+                    ws.send(JSON.stringify("ap" + price))
+                })
+
+                server_db_utils.getUserById(req.user._id).then((user) => {
+                    if(user.production_on_off == 0){
+                        ws.send(JSON.stringify("st" + "Stopped"))
+                    } else if(user.production_on_off == 1 && user.production == 0){
+                        ws.send(JSON.stringify("st" + "Starting"))
+                    } else{
+                        ws.send(JSON.stringify("st" + "Running"))
+                    }
+
+                    // earnings (balance)
+                    ws.send(JSON.stringify("ea" + user.balance))
+
+                    // plant buffer percentage (pb)
+                    let percentage = ((user.buffer / user.buffer_max) * 100).toFixed(2)
+                    ws.send(JSON.stringify("pb" + percentage))
+
+                    // plant production (pp)
+                    ws.send(JSON.stringify("pp" + user.production))
+
+                    // plant consumption (pc)
+                    ws.send(JSON.stringify("pc" + user.consumption))
+                })
+            })
+        }
+    });
+});
+
+router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, res, next){
+    server_db_utils.uploadUserImage(req.file.path, req.user._id).then(() => {
+        return res.status(200).redirect('/profile')
     });
 });
 
@@ -156,6 +239,20 @@ router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
+router.put('/manager/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
+                res.status(200).send()
+            });
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
 router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
@@ -170,11 +267,75 @@ router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
+router.put('/manager/:id/production_on_off/:value/', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            if(req.params.value == 1){
+                server_db_utils.updateOnOffById(req.params.id,true).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateConsumptionById(req.params.id,  process.env.PLANT_CONSUMPTION).then(() => {
+                    res.status(200).send()
+                });
+                prod_timer = setTimeout(function(){prod_started(req.params.id, process.env.PLANT_PRODUCTION)},30000)
+            } else if (req.params.value == 0){
+                clearTimeout(prod_timer)
+                prod_timer = null
+                server_db_utils.updateOnOffById(req.params.id,false).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateConsumptionById(req.params.id,  0).then(() => {
+                    res.status(200).send()
+                });
+                server_db_utils.updateProductionById(req.params.id,  0).then(() => {
+                    res.status(200).send()
+                });
+            }
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+async function prod_started(manager_id, production){
+    await server_db_utils.updateProductionById(manager_id,  production)
+}
+
+router.get('/manager/:id/production_on_off', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getUserById(req.params.id).then((manager) => {
+                res.status(200).json(manager.production_on_off)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+})
+
 router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
             server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.over_production_sell)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+})
+
+router.get('/manager/:id/sell_ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.getUserById(req.params.id).then((manager) => {
+                res.status(200).json(manager.over_production_sell)
             })
         } catch (err) {
             res.status(500).json({message: "Serverside error."})
@@ -189,6 +350,21 @@ router.get('/prosumer/:id/buy_ratio', checkAuth, async(req, res) => {
         try {
             server_db_utils.getUserById(req.params.id).then((prosumer) => {
                 res.status(200).json(prosumer.under_production_buy)
+            })
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+// UPDATING NEW PRICE
+router.put('/manager/:id/new_price/:price', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            sim_db_utils.updatePrice(Number(req.params.price)).then(() => {
+                res.status(200).send()
             })
         } catch (err) {
             res.status(500).json({message: "Serverside error."})
