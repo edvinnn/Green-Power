@@ -80,6 +80,10 @@ updateOnOffById = async function (id, production_on_off) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
 }
 
+updateUserPasswordById = async function (id, password) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"password": password}).exec()
+}
+
 registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
@@ -108,5 +112,6 @@ module.exports = {
     updateOnOffById: updateOnOffById,
     model: Model,
     uploadUserImage: uploadUserImage,
-    retriveUserHouseImage, retriveUserHouseImage
+    retriveUserHouseImage, retriveUserHouseImage,
+    updateUserPasswordById, updateUserPasswordById
 }

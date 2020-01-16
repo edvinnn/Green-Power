@@ -38,7 +38,7 @@
                                     <br>
                                     <br>
 
-                                    <form action="/change_password" method="POST">
+                                    <form id="register-form" class="user" action="/api/change_password" method="POST">
                                         <h5 class="text-primary">Change password</h5>
                                         <div class="form-group">
                                             <label for="password">Old password</label>
@@ -54,12 +54,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Repeat new password</label>
-                                            <input type="password" class="form-control form-control-user" id="passord"
-                                                name="passord2" aria-describedby="passwordHelp"
+                                            <input type="password" class="form-control form-control-user" id="passwordRepeat"
+                                                name="passordRepeat" aria-describedby="passwordHelp"
                                                 placeholder="Enter new passord again...">
                                         </div>
-                                        <button id="new-name-submit" type="submit"
-                                            class="btn btn-primary btn-user btn-block" disabled>Change
+                                        <button onclick="submitForm()" type="button"
+                                            class="btn btn-primary btn-user btn-block">Change
                                             password</button>
                                     </form>
                                 </div>
