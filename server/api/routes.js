@@ -466,6 +466,19 @@ router.post('/prosumer/change_email', async (req, res) => {
     }
 })
 
+router.post('/change_password', async (req, res) => {
+    if(!req.isAuthenticated()) {
+        return res.status(403).send();
+    }
+    try {
+        // TODO
+        res.status(200).redirect('/profile')
+    } catch (err) {
+        res.status(500).send()
+        console.log(err)
+    }
+})
+
 // WINDS
 // Get 20 latest winds
 router.get('/wind', async (req, res) => {
