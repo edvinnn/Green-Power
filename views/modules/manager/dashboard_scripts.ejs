@@ -73,11 +73,11 @@
         }
     }
 
-    function send_sell_value(){
+    function send_effect_value(){
 
-        let sell_ratio = document.getElementById("sell_slider_manager").value
+        let effect_value = document.getElementById("production_effect_manager").value
         $.ajax({
-            url: '<%= api %>/manager/<%= user.id %>/sell_ratio/' + sell_ratio,
+            url: '<%= api %>/manager/<%= user.id %>/effect_value/' + effect_value,
             type: 'PUT',
             success: function () {
             }
@@ -104,9 +104,9 @@
     }
 
     $(document).ready(function () {
-        fetch('<%= api %>/manager/<%= user.id %>/sell_ratio').then((response) => {
+        fetch('<%= api %>/manager/<%= user.id %>/effect_value').then((response) => {
             response.json().then((value) => {
-                document.getElementById("sell_slider_manager").value = value
+                document.getElementById("production_effect_manager").value = value
             })
         })
     })

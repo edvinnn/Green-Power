@@ -102,7 +102,8 @@ router.ws('/dashboard', function (ws, req) {
                     ws.send(JSON.stringify("pb" + percentage))
 
                     // plant production (pp)
-                    ws.send(JSON.stringify("pp" + user.production))
+                    let plant_production = user.production * user.over_production_sell
+                    ws.send(JSON.stringify("pp" + plant_production))
 
                     // plant consumption (pc)
                     ws.send(JSON.stringify("pc" + user.consumption))
@@ -119,11 +120,15 @@ router.ws('/dashboard', function (ws, req) {
 
 //Delete user
 router.delete('/manager/delete_user/:id', async (req, res) => {
-    try{
-        await server_db_utils.deleteUserById(req.params.id)
-        res.status(204).send()
-    } catch(err) {
-        res.status(500).send({message: err.message})
+    if(req.user.isManager){
+        try{
+            await server_db_utils.deleteUserById(req.params.id)
+            res.status(204).send()
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    } else {
+        res.status(403).send({message: "Unauthorized."})
     }
 })
 
@@ -224,6 +229,25 @@ router.get('/prosumer/:id/production', async (req, res) => {
     }
 })
 
+router.put('/manager/block_user/:id/:value', async (req, res) => {
+    if(req.user.isManager){
+        try {
+            let counter_value = req.params.value / 10
+            await server_db_utils.blockUserById(req.params.id, true)
+            const prosumer = await server_db_utils.setBlockCounterById(req.params.id, Math.ceil(counter_value))
+            if (prosumer == null) {
+                res.status(404).send()
+            } else {
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    } else {
+        res.status(403).send({message: "Unauthorized."})
+    }
+})
+
 // NET PRODUCTION
 // Get prosumer net production by id
 router.get('/prosumer/:id/net_production', async(req, res) => {
@@ -255,7 +279,7 @@ router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
     }
 });
 
-router.put('/manager/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
+router.put('/manager/:id/effect_value/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
             server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
@@ -347,7 +371,7 @@ router.get('/prosumer/:id/sell_ratio', checkAuth, async(req, res) => {
     }
 })
 
-router.get('/manager/:id/sell_ratio', checkAuth, async(req, res) => {
+router.get('/manager/:id/effect_value', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
             server_db_utils.getUserById(req.params.id).then((manager) => {

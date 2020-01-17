@@ -18,6 +18,7 @@
             while(table.rows.length > 0){
                 table.deleteRow(0)
             }
+
             for(const prosumer of prosumers){
                 let new_row = table.insertRow(0)
                 new_row.style.height = "100%"
@@ -29,8 +30,37 @@
                 new_row.insertCell(4).innerHTML = prosumer.under_production_buy * 100 + "%"
                 let buffer_percentage = (prosumer.buffer / prosumer.buffer_max) * 100
                 new_row.insertCell(5).innerHTML = buffer_percentage.toFixed(2) + "%"
-                new_row.insertCell(6).innerHTML = "No Blackout"
-                new_row.insertCell(7).innerHTML = "Not blocked"
+                if(prosumer.blackout){
+                    new_row.insertCell(6).innerHTML = "<i class='fas fa-bolt text-black-50'></i>"
+                    new_row.cells[6].title = prosumer.name + " is currently experiencing a blackout."
+                    new_row.cells[6].style.textAlign = "center"
+                } else{
+                    new_row.insertCell(6).innerHTML = "<i class='fas fa-bolt text-warning'></i>"
+                    new_row.cells[6].title = prosumer.name + " is provided with electricity."
+                    new_row.cells[6].style.textAlign = "center"
+                }
+                let button = document.createElement("button")
+                button.innerHTML = "Block User"
+                if(prosumer.isBlocked){
+                    button.setAttribute("class", "btn btn-secondary")
+                } else{
+                    button.setAttribute("class", "btn btn-primary")
+                }
+                new_row.insertCell(7).appendChild(button)
+                button.addEventListener("click", function () {
+                    let prompt_value = prompt("Please enter how long to block the user (10 - 100 seconds)", "10")
+                    if(prompt_value >= 10 && prompt_value < 101 && !isNaN(prompt_value)){
+                        $.ajax({
+                            url: '<%= api %>/manager/block_user/' + prosumer._id + '/' + prompt_value,
+                            type: 'PUT',
+                            success: function () {
+                            }
+                        });
+                    } else{
+                        alert(prompt_value + " is not an eligible number, the value should be written in numerical form from 10-100 only (e.g. [10] or [100]).")
+                    }
+
+                })
                 if(prosumer.is_online){
                     new_row.insertCell(8).innerHTML = "<i class='fas fa-circle fa text-success'></i>"
                     new_row.cells[8].style.textAlign = "center"
@@ -39,6 +69,7 @@
                     new_row.cells[8].style.textAlign = "center"
                 }
                 new_row.insertCell(9).innerHTML = "<i class='fas fa-trash'></i>"
+                new_row.cells[9].title = "Delete the user from the system"
                 new_row.cells[9].style.textAlign = "center"
                 new_row.cells[9].onclick = function() {
                     if(confirm("Are you sure you want to delete " + prosumer.name + "?")){
@@ -48,7 +79,7 @@
             }
         }
     };
-
+    
     socket.onclose = function (event) {
         if (event.wasClean) {
             alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
