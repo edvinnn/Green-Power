@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 const Model = require('./model')
 const passport = require('passport')
 const initializePassport = require('./passport-config')
@@ -7,6 +10,27 @@ initializePassport(
     email => Model.User.find({email: email}).exec(),
     id => Model.User.findById(id).exec()
 )
+
+uploadUserImage = async function(image, userId) {
+    let oldEntry = await Model.Picture.findOneAndUpdate({"user": userId}, {"user": userId, "imageUrl": image});
+    if(oldEntry == null){
+        let picture =  new Model.Picture({
+            imageUrl: image,
+            user: userId
+        });
+        await picture.save();
+    };
+}
+
+retriveUserHouseImage = async function(userId) {
+    return await Model.Picture.findOne({user: userId}).exec().then(picture => {
+        if (picture == null) {
+            return "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2255&q=80"
+        } else {
+            return process.env.SERVER_ROOT_ADDRESS + picture.imageUrl
+        }
+    })
+}
 
 updateConsumptionById = async function(id, consumption) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"consumption": consumption}).exec()
@@ -60,6 +84,36 @@ deleteUserById = async function (id){
     return await Model.User.findOneAndDelete({"_id":id}).exec()
 }
 
+updateUserPasswordById = async function (id, password) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"password": password}).exec()
+}
+
+setProsumerBlackoutFlag = async function (id) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"blackout": true}).exec()
+}
+
+removeProsumerBlackoutFlag = async function (id) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"blackout": false}).exec()
+}
+
+addToManagerBufferById = async function (id, amount) {
+    const manager = await Model.User.findById(id);
+    const new_buffer = manager.buffer + amount
+    if (new_buffer > manager.buffer_max) {
+        return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": manager.buffer_max})
+    }
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": new_buffer});
+}
+
+takeFromManagerBufferById = async function (id, amount) {
+    const manager = await Model.User.findById(id);
+    const new_buffer = manager.buffer - amount
+    if (new_buffer < 0) {
+        return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": 0})
+    }
+    return await Model.User.findOneAndUpdate({"_id": id}, {"buffer": new_buffer});
+}
+
 registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
@@ -92,5 +146,12 @@ module.exports = {
     updateOnOffById: updateOnOffById,
     updateOnlineById: updateOnlineById,
     deleteUserById: deleteUserById,
-    model: Model
+    model: Model,
+    uploadUserImage: uploadUserImage,
+    retriveUserHouseImage: retriveUserHouseImage,
+    updateUserPasswordById: updateUserPasswordById,
+    addToManagerBufferById: addToManagerBufferById,
+    takeFromManagerBufferById: takeFromManagerBufferById,
+    setProsumerBlackoutFlag: setProsumerBlackoutFlag,
+    removeProsumerBlackoutFlag: removeProsumerBlackoutFlag
 }

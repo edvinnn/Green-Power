@@ -149,6 +149,7 @@ prosumerConsumption = async function () {
 userBuffer = async function () {
 
     const users = await server_db_utils.getAllUsers()
+    const managers = await server_db_utils.getAllManagers()
     for(const user of users){
 
         // net production
@@ -178,17 +179,26 @@ userBuffer = async function () {
                 let conserve = diff * (1 - user.over_production_sell)
 
                 if(user.buffer + conserve > user.buffer_max){
+                    const rest = user.buffer + conserve - user.buffer_max
+
                     await server_db_utils.updateBalanceById(user.id, (user.balance + sell).toFixed(2))
                     await server_db_utils.updateBufferById(user.id, (user.buffer_max).toFixed(2))
+                    await server_db_utils.addToManagerBufferById(managers[0]._id, rest)
                 }
                 else {
                     await server_db_utils.updateBalanceById(user.id, (user.balance + sell).toFixed(2))
                     await server_db_utils.updateBufferById(user.id, (user.buffer + conserve).toFixed(2))
+
+                    let addToManagerBuffer = diff * user.over_production_sell
+                    await server_db_utils.addToManagerBufferById(managers[0]._id, addToManagerBuffer)
                 }
             }
             // buying with positive net production not possible atm (should not necessarily buy) or if both sliders set to 0
             else{
                 await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
+            }
+            if(user.blackout == true) {
+                await server_db_utils.removeProsumerBlackoutFlag(user.id)
             }
         }
         else {
@@ -196,6 +206,7 @@ userBuffer = async function () {
             if(user.under_production_buy > 0){
                 let buy = -diff * user.under_production_buy * current_price
                 let conserve = -diff * (1 - user.under_production_buy)
+                let buyAmountInKw = Math.abs(diff * user.under_production_buy)
 
                 if(user.balance >= buy){
                     if(user.buffer - conserve < 0){
@@ -204,6 +215,20 @@ userBuffer = async function () {
                     else {
                         await server_db_utils.updateBalanceById(user.id, (user.balance - buy).toFixed(2))
                         await server_db_utils.updateBufferById(user.id, (user.buffer - conserve).toFixed(2))
+                        
+                        const manager = await server_db_utils.takeFromManagerBufferById(managers[0]._id, buyAmountInKw);
+                        if(manager.buffer == 0){
+                            if(user.buffer - buyAmountInKw < 0){
+                                await server_db_utils.updateBufferById(user.id, 0);
+                            } else {
+                                await server_db_utils.updateBufferById(user.id, (user.buffer - buyAmountInKw));
+                            }
+                            await server_db_utils.setProsumerBlackoutFlag(user.id)
+                        } else {
+                            if(user.blackout == true) {
+                                await server_db_utils.removeProsumerBlackoutFlag(user.id)
+                            }
+                        }
                     }
                 } else {
                     // not enough money

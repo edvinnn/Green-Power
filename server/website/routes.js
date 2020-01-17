@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/profile', checkAuth, async (req, res) => {
-    res.render('profile.ejs', {user: req.user})
+    let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
+    res.render('profile.ejs', {user: req.user, image: pictureUrl})
 })
 
 router.get('/login', checkNotAuth, async (req, res) => {
@@ -31,9 +32,12 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
+        const user = await server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
         if(user != null) {
-            res.redirect('/login')
+            req.login(user, function(err) {
+                if(err) { return next(err); }
+                return res.redirect('/dashboard')
+            });
         } else {
             res.status(500).send({message: "Could not create user."})
         }
@@ -57,6 +61,7 @@ router.post('/register/manager', async (req, res) => {
 })
 
 router.get('/dashboard', checkAuth, async (req, res) => {
+    let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
     if(req.user.isManager){
         await server_db_utils.updateOnlineById(req.user._id, true)
         res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
@@ -68,7 +73,8 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
 router.get('/prosumer_list', checkAuth, async (req, res) => {
     if(req.user.isManager && req.isAuthenticated()){
-        res.render('manager-list.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
+        res.render('manager-list.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     }   else{
         res.status(403).send({message: "Unauthorized."})
     }

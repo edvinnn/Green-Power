@@ -10,6 +10,7 @@ const session = require('express-session')
 const express_websocket = require('express-ws')(app);
 
 app.use(express.static('green-power-public'))
+app.use('/user_uploads', express.static('user_uploads'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())

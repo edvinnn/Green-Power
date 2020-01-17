@@ -38,7 +38,7 @@
                                     <br>
                                     <br>
 
-                                    <form action="/change_password" method="POST">
+                                    <form id="register-form" class="user" action="/api/change_password" method="POST">
                                         <h5 class="text-primary">Change password</h5>
                                         <div class="form-group">
                                             <label for="password">Old password</label>
@@ -54,12 +54,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Repeat new password</label>
-                                            <input type="password" class="form-control form-control-user" id="passord"
-                                                name="passord2" aria-describedby="passwordHelp"
+                                            <input type="password" class="form-control form-control-user" id="passwordRepeat"
+                                                name="passordRepeat" aria-describedby="passwordHelp"
                                                 placeholder="Enter new passord again...">
                                         </div>
-                                        <button id="new-name-submit" type="submit"
-                                            class="btn btn-primary btn-user btn-block" disabled>Change
+                                        <button onclick="submitForm()" type="button"
+                                            class="btn btn-primary btn-user btn-block">Change
                                             password</button>
                                     </form>
                                 </div>
@@ -160,14 +160,17 @@
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
-                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=1950&q=80"
-                                alt="Italian Trulli">
+                            <img src="<%= image %>"
+                                alt="house image">
 
-                            <form action="/upload_house" method="POST">
+                            <form id="upload-img-form" action="/api/upload_photo" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <br>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block"
-                                        disabled>Upload</button>
+                                    <label class="btn btn-primary" for="img-upload-btn">
+                                        <input id="img-upload-btn" class="d-none" type="file" name="avatar">
+                                        Upload image
+                                    </label>
+                                    <!--<button type="submit" class="btn btn-primary btn-user btn-block">Upload</button>-->
                                 </div>
                             </form>
                         </div>
@@ -192,5 +195,11 @@
     <!-- End of Footer -->
 </div>
 
+<script>
+    let upload_btn = document.getElementById("img-upload-btn");
+    upload_btn.onchange = function(){
+        document.getElementById("upload-img-form").submit();
+    }
+</script>
 <%- include('logout_prompt'); -%>
 <!-- End of Content Wrapper -->

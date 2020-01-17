@@ -74,11 +74,32 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    blackout: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+});
+
+const profilePictureSchema = new mongoose.Schema({
+    imageUrl: {
+        type: String
+    },
+    category: {
+        type: String
+    },
+    user: {
+        type: String,
+        required: true,
+        default: ""
     }
 });
 
 let User = server_connection.model('User', userSchema, 'users');
+let Picture = server_connection.model('Picture', profilePictureSchema, 'pictures');
 
 module.exports = {
-    User: User
+    User: User,
+    Picture: Picture
 }

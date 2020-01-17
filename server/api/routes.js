@@ -3,6 +3,15 @@ const router = express.Router()
 var expressWs = require('express-ws')(router)
 const server_db_utils = require('../server_db_utils')
 const sim_db_utils = require('../../simulator/sim_db_utils')
+const bcrypt = require('bcrypt')
+const multer = require('multer');
+var storage = multer.diskStorage({
+    destination: './user_uploads/',
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+const upload = multer({ storage: storage })
 let prod_timer = null;
 
 router.ws('/dashboard', function (ws, req) {
@@ -117,6 +126,12 @@ router.delete('/manager/delete_user/:id', async (req, res) => {
         res.status(500).send({message: err.message})
     }
 })
+
+router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, res, next){
+    server_db_utils.uploadUserImage(req.file.path, req.user._id).then(() => {
+        return res.status(200).redirect('/profile')
+    });
+});
 
 //CONSUMPTION
 //Update prosumer consumption by id
@@ -461,6 +476,21 @@ router.post('/prosumer/change_email', async (req, res) => {
             user.save()
             res.status(200).redirect('/profile')
         })
+    } catch (err) {
+        res.status(500).send()
+        console.log(err)
+    }
+})
+
+router.post('/change_password', async (req, res) => {
+    if(!req.isAuthenticated()) {
+        return res.status(403).send();
+    }
+    try {
+        const hashed_pwd = await bcrypt.hash(req.body.password1, 10)
+        server_db_utils.updateUserPasswordById(req.user._id, hashed_pwd).then(() => {
+            res.status(200).redirect('/profile')
+        });
     } catch (err) {
         res.status(500).send()
         console.log(err)
