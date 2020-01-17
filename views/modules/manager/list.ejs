@@ -14,14 +14,15 @@
             </div>
             <!-- Content Row 1-->
             <div class="row">
+
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
+                    <div class="card-header py-3" id="test">
                         <h6 class="m-0 font-weight-bold text-primary">List of Prosumers</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -33,6 +34,7 @@
                                     <th>Black out</th>
                                     <th>Block from selling</th>
                                     <th>Online/Offline</th>
+                                    <th>Delete Prosumer</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -46,63 +48,10 @@
                                     <th>Black out</th>
                                     <th>Block from selling</th>
                                     <th>Online/Offline</th>
+                                    <th>Delete Prosumer</th>
                                 </tr>
                                 </tfoot>
-                                <tbody>
-                                <tr>
-                                    <td>Hampus</td>
-                                    <td>h@h.se</td>
-                                    <td>2 kWh</td>
-                                    <td>0.5 kWh</td>
-                                    <td>0 kWh</td>
-                                    <td>30%</td>
-                                    <td>No</td>
-                                    <td>
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                                            <label class="custom-control-label" for="defaultUnchecked"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-circle fa text-success"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Edvin</td>
-                                    <td>edvin@e.se</td>
-                                    <td>7 kWh</td>
-                                    <td>0.2 kWh</td>
-                                    <td>0 kWh</td>
-                                    <td>60%</td>
-                                    <td>No</td>
-                                    <td>
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                                            <label class="custom-control-label" for="defaultUnchecked"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-circle fa text-danger"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Hasse</td>
-                                    <td>hasse@h.se</td>
-                                    <td>-3 kWh</td>
-                                    <td>0 kWh</td>
-                                    <td>0.5 kWh</td>
-                                    <td>0%</td>
-                                    <td>Yes</td>
-                                    <td>
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                                            <label class="custom-control-label" for="defaultUnchecked"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <i class="fas fa-circle fa text-success"></i>
-                                    </td>
-                                </tr>
+                                <tbody id="tbody">
                                 </tbody>
                             </table>
                         </div>
@@ -126,3 +75,5 @@
 
 <%- include('../logout_prompt'); -%>
 <!-- End of Content Wrapper -->
+
+<%- include('prosumer_list_scripts'); -%>

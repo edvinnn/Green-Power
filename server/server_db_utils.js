@@ -17,7 +17,7 @@ getAllUsers = async function() {
 }
 
 getAllProsumers = async function() {
-    return await Model.User.find({isManager: false}).exec()
+    return await Model.User.find({isManager: false}, {password: 0}).exec()
 }
 
 getAllManagers = async function() {
@@ -56,6 +56,10 @@ updateOnOffById = async function (id, production_on_off) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
 }
 
+deleteUserById = async function (id){
+    return await Model.User.findOneAndDelete({"_id":id}).exec()
+}
+
 registerNewUser = async function(name, email, hashed_password, isManager, buffer_max) {
     const user = new Model.User({
         name: name,
@@ -66,6 +70,10 @@ registerNewUser = async function(name, email, hashed_password, isManager, buffer
     })
     await user.save()
     return user
+}
+
+updateOnlineById = async function (id, new_state) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"is_online": new_state}).exec()
 }
 
 module.exports = {
@@ -82,5 +90,7 @@ module.exports = {
     getAllManagers: getAllManagers,
     getAllUsers: getAllUsers,
     updateOnOffById: updateOnOffById,
+    updateOnlineById: updateOnlineById,
+    deleteUserById: deleteUserById,
     model: Model
 }
