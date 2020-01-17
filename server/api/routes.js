@@ -120,11 +120,15 @@ router.ws('/dashboard', function (ws, req) {
 
 //Delete user
 router.delete('/manager/delete_user/:id', async (req, res) => {
-    try{
-        await server_db_utils.deleteUserById(req.params.id)
-        res.status(204).send()
-    } catch(err) {
-        res.status(500).send({message: err.message})
+    if(req.user.isManager){
+        try{
+            await server_db_utils.deleteUserById(req.params.id)
+            res.status(204).send()
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    } else {
+        res.status(403).send({message: "Unauthorized."})
     }
 })
 
@@ -226,17 +230,21 @@ router.get('/prosumer/:id/production', async (req, res) => {
 })
 
 router.put('/manager/block_user/:id/:value', async (req, res) => {
-    try {
-        let counter_value = req.params.value / 10
-        await server_db_utils.blockUserById(req.params.id, true)
-        const prosumer = await server_db_utils.setBlockCounterById(req.params.id, Math.ceil(counter_value))
-        if (prosumer == null) {
-            res.status(404).send()
-        } else {
-            res.status(204).send()
+    if(req.user.isManager){
+        try {
+            let counter_value = req.params.value / 10
+            await server_db_utils.blockUserById(req.params.id, true)
+            const prosumer = await server_db_utils.setBlockCounterById(req.params.id, Math.ceil(counter_value))
+            if (prosumer == null) {
+                res.status(404).send()
+            } else {
+                res.status(204).send()
+            }
+        } catch(err) {
+            res.status(500).send({message: err.message})
         }
-    } catch(err) {
-        res.status(500).send({message: err.message})
+    } else {
+        res.status(403).send({message: "Unauthorized."})
     }
 })
 
