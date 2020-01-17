@@ -32,9 +32,12 @@ router.get('/register', checkNotAuth, async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const hashed_pwd = await bcrypt.hash(req.body.password, 10)
-        const user = server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
+        const user = await server_db_utils.registerNewUser(req.body.name, req.body.email.toLowerCase(), hashed_pwd, false, 10)
         if(user != null) {
-            res.redirect('/login')
+            req.login(user, function(err) {
+                if(err) { return next(err); }
+                return res.redirect('/dashboard')
+            });
         } else {
             res.status(500).send({message: "Could not create user."})
         }
