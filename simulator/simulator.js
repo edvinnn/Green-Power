@@ -148,7 +148,7 @@ prosumerConsumption = async function () {
 // updates buffer based on net production
 userBuffer = async function () {
 
-    const users = await server_db_utils.getAllUsers()
+    const users = await server_db_utils.getAllProsumers()
     const managers = await server_db_utils.getAllManagers()
     for(const user of users){
 
@@ -174,7 +174,7 @@ userBuffer = async function () {
 
         if(net > 0){
             // selling with positive net production
-            if(user.over_production_sell > 0){
+            if(user.over_production_sell > 0 && !user.isBlocked){
                 let sell = diff * user.over_production_sell * current_price
                 let conserve = diff * (1 - user.over_production_sell)
 
@@ -239,6 +239,55 @@ userBuffer = async function () {
             else{
                 await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
             }
+        }
+        if(user.isBlocked) {
+            if (user.blockedCounter < 1) {
+                await server_db_utils.blockUserById(user.id, false)
+            } else {
+                await server_db_utils.decreaseBlockCounterById(user.id)
+            }
+        }
+    }
+
+    // Manager buffer
+    for(const manager of managers){
+        // net production
+        let net = manager.production * manager.over_production_sell - manager.consumption
+
+        // update buffer based on net production model
+        let buffer_model = (net / 10)
+
+        let new_buffer = manager.buffer + buffer_model
+
+        let diff = new_buffer - manager.buffer
+
+        if (new_buffer > manager.buffer_max){
+            new_buffer = manager.buffer_max
+        }
+
+        if(new_buffer < 0) {
+            new_buffer = 0
+        }
+
+        const current_price = await sim_db_utils.getLatestPrice()
+
+        if(net > 0){
+            if(manager.over_production_sell > 0){
+                let sell = diff * manager.over_production_sell * current_price
+                let conserve = diff *  manager.over_production_sell
+
+                if(manager.buffer + conserve > manager.buffer_max){
+                    await server_db_utils.updateBalanceById(manager.id, (manager.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(manager.id, (manager.buffer_max).toFixed(2))
+                }
+                else {
+                    await server_db_utils.updateBalanceById(manager.id, (manager.balance + sell).toFixed(2))
+                    await server_db_utils.updateBufferById(manager.id, (manager.buffer + conserve).toFixed(2))
+                }
+            }
+        }
+        else {
+            await server_db_utils.updateBufferById(manager.id, new_buffer.toFixed(2))
         }
     }
 }

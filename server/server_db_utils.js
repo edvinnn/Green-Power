@@ -130,6 +130,22 @@ updateOnlineById = async function (id, new_state) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"is_online": new_state}).exec()
 }
 
+blockUserById = async function (id, new_state) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"isBlocked": new_state}).exec()
+}
+
+setBlockCounterById = async function (id, number){
+    return await Model.User.findOneAndUpdate({"_id": id}, {"blockedCounter": number}).exec()
+}
+
+decreaseBlockCounterById = async function (id){
+    let user = await Model.User.findOne({"_id": id}).exec()
+    user.blockedCounter--
+    await user.save()
+    return user
+}
+
+
 module.exports = {
     updateConsumptionById: updateConsumptionById,
     getAllProsumers: getAllProsumers,
@@ -153,5 +169,8 @@ module.exports = {
     addToManagerBufferById: addToManagerBufferById,
     takeFromManagerBufferById: takeFromManagerBufferById,
     setProsumerBlackoutFlag: setProsumerBlackoutFlag,
-    removeProsumerBlackoutFlag: removeProsumerBlackoutFlag
+    removeProsumerBlackoutFlag: removeProsumerBlackoutFlag,
+    blockUserById: blockUserById,
+    setBlockCounterById: setBlockCounterById,
+    decreaseBlockCounterById: decreaseBlockCounterById
 }

@@ -79,6 +79,16 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    isBlocked: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    blockedCounter: {
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 

@@ -64,23 +64,32 @@
                                     </form>
                                 </div>
                                 <!-- End of Left side-->
+                                <% if (!user.isManager){ %>
+                                    <!-- Middle -->
+                                    <div class="col">
+                                        <h5 class="text-primary">Wind turbine <a href="#" class="disabled"><span
+                                                        style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                        <p>ABB Smooth Electric Xs1000</p>
+                                        <h5 class="text-primary">Battery model <a href="#" class="disabled"><span
+                                                        style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                        <p>ABB Lithium 50 000mAh</p>
+                                    </div>
+                                <% } else { %>
+                                    <!-- Middle -->
+                                    <div class="col">
+                                        <h5 class="text-primary">Coal Plant <a href="#" class="disabled"><span
+                                                        style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                        <p>ABB Smooth Coal Plant Xs1000</p>
+                                        <h5 class="text-primary">Battery model <a href="#" class="disabled"><span
+                                                        style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
+                                        <p>ABB Lithium 5 000 000mAh</p>
+                                    </div>
+                                <% } %>
 
-                                <!-- Middle -->
-                                <div class="col">
-                                    <h5 class="text-primary">Wind turbine <a href="#" class="disabled"><span
-                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
-                                    <p>ABB Smooth Electric Xs1000</p>
-                                    <h5 class="text-primary">Battery model <a href="#" class="disabled"><span
-                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
-                                    <p>ABB Lithium 50 000mAh</p>
-                                </div>
                                 <!-- End of middle -->
 
                                 <!-- Right side -->
                                 <div class="col">
-                                    <h5 class="text-primary">Address <a href="#" class="disabled"><span
-                                                style="font-size: 70%;"><i class="fas fa-pen"></i></span></a></h5>
-                                    <p>Laboratorievägen 21<br>97756 Luleå<br>Sweden</p>
                                 </div>
                                 <!-- End of Right side -->
 
