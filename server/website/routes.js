@@ -71,7 +71,8 @@ router.get('/dashboard', checkAuth, async (req, res) => {
 
 router.get('/prosumer_list', checkAuth, async (req, res) => {
     if(req.user.isManager && req.isAuthenticated()){
-        res.render('manager-list.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS})
+        let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
+        res.render('manager-list.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     }   else{
         res.status(403).send({message: "Unauthorized."})
     }
