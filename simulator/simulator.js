@@ -197,6 +197,9 @@ userBuffer = async function () {
             else{
                 await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
             }
+            if(user.blackout == true) {
+                await server_db_utils.removeProsumerBlackoutFlag(user.id)
+            }
         }
         else {
             // buying with negative net production
@@ -212,7 +215,20 @@ userBuffer = async function () {
                     else {
                         await server_db_utils.updateBalanceById(user.id, (user.balance - buy).toFixed(2))
                         await server_db_utils.updateBufferById(user.id, (user.buffer - conserve).toFixed(2))
-                        await server_db_utils.takeFromManagerBufferById(managers[0]._id, buyAmountInKw)
+                        
+                        const manager = await server_db_utils.takeFromManagerBufferById(managers[0]._id, buyAmountInKw);
+                        if(manager.buffer == 0){
+                            if(user.buffer - buyAmountInKw < 0){
+                                await server_db_utils.updateBufferById(user.id, 0);
+                            } else {
+                                await server_db_utils.updateBufferById(user.id, (user.buffer - buyAmountInKw));
+                            }
+                            await server_db_utils.setProsumerBlackoutFlag(user.id)
+                        } else {
+                            if(user.blackout == true) {
+                                await server_db_utils.removeProsumerBlackoutFlag(user.id)
+                            }
+                        }
                     }
                 } else {
                     // not enough money
@@ -222,17 +238,6 @@ userBuffer = async function () {
             // selling with negative net production not possible atm (should not necessarily sell) or if both sliders set to 0
             else{
                 await server_db_utils.updateBufferById(user.id, new_buffer.toFixed(2))
-            }
-        }
-        
-        // Check for blackout
-        const manager = server_db_utils.getUserById(managers[0]._id)
-        if(diff < 0 && new_buffer == 0 && manager.buffer == 0) {
-            await server_db_utils.setProsumerBlackoutFlag(user._id)
-        }
-        else {
-            if(user.blackout == true){
-                await server_db_utils.removeProsumerBlackoutFlag(user._id)
             }
         }
     }
