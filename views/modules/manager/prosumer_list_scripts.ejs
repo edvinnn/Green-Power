@@ -1,0 +1,75 @@
+<script src="vendor/jquery/jquery.js"></script>
+<script>
+    let socket = new WebSocket("<%= ws  %>/api/dashboard/");
+
+    socket.onopen = function (e) {
+        socket.send("request_prosumer_list_data");
+    };
+
+    socket.onmessage = function (event) {
+        if (event.data === 'refresh') {
+            socket.send("request_prosumer_list_data")
+            return
+        };
+
+        if (event.data.slice(0, 2) === "pn") {
+            let prosumers = JSON.parse(event.data.slice(2, event.data.length))
+            let table = document.getElementById("tbody")
+            while(table.rows.length > 0){
+                table.deleteRow(0)
+            }
+            for(const prosumer of prosumers){
+                let new_row = table.insertRow(0)
+                new_row.style.height = "100%"
+                new_row.insertCell(0).innerHTML = prosumer.name
+                new_row.insertCell(1).innerHTML = prosumer.email
+                let net_production = prosumer.production - prosumer.consumption
+                new_row.insertCell(2).innerHTML = net_production.toFixed(2) + " kWh"
+                new_row.insertCell(3).innerHTML = prosumer.over_production_sell * 100 + "%"
+                new_row.insertCell(4).innerHTML = prosumer.under_production_buy * 100 + "%"
+                let buffer_percentage = (prosumer.buffer / prosumer.buffer_max) * 100
+                new_row.insertCell(5).innerHTML = buffer_percentage.toFixed(2) + "%"
+                new_row.insertCell(6).innerHTML = "No Blackout"
+                new_row.insertCell(7).innerHTML = "Not blocked"
+                if(prosumer.is_online){
+                    new_row.insertCell(8).innerHTML = "<i class='fas fa-circle fa text-success'></i>"
+                    new_row.cells[8].style.textAlign = "center"
+                } else {
+                    new_row.insertCell(8).innerHTML = "<i class='fas fa-circle fa text-danger'></i>"
+                    new_row.cells[8].style.textAlign = "center"
+                }
+                new_row.insertCell(9).innerHTML = "<i class='fas fa-trash'></i>"
+                new_row.cells[9].style.textAlign = "center"
+                new_row.cells[9].onclick = function() {
+                    if(confirm("Are you sure you want to delete " + prosumer.name + "?")){
+                        drop_user(prosumer._id)
+                    }
+                }
+            }
+        }
+    };
+
+    socket.onclose = function (event) {
+        if (event.wasClean) {
+            alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        } else {
+            // e.g. server process killed or network down
+            // event.code is usually 1006 in this case
+            alert('[close] Connection died');
+        }
+    };
+
+    socket.onerror = function (error) {
+        alert(`[error] ${error.message}`);
+    };
+
+    function drop_user(id){
+        $.ajax({
+            url: '<%= api %>/manager/delete_user/' + id,
+            type: 'DELETE',
+            success: function () {
+            }
+        });
+    }
+
+</script>

@@ -5,7 +5,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const passport = require('passport')
-const server_db_utils = require('./../server_db_utils')
+const server_db_utils = require('../server_db_utils')
 
 router.get('/', async (req, res) => {
     if (req.isAuthenticated()) {
@@ -63,8 +63,10 @@ router.post('/register/manager', async (req, res) => {
 router.get('/dashboard', checkAuth, async (req, res) => {
     let pictureUrl = await server_db_utils.retriveUserHouseImage(req.user._id);
     if(req.user.isManager){
+        await server_db_utils.updateOnlineById(req.user._id, true)
         res.render('manager-dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     } else {
+        await server_db_utils.updateOnlineById(req.user._id, true)
         res.render('dashboard.ejs', {user: req.user, ws: process.env.SERVER_WS_ADDRESS, api: process.env.SERVER_ADDRESS, image: pictureUrl})
     }
 })
@@ -78,7 +80,8 @@ router.get('/prosumer_list', checkAuth, async (req, res) => {
     }
 })
 
-router.get('/logout', checkAuth, (req, res) => {
+router.get('/logout', checkAuth, async (req, res) => {
+    await server_db_utils.updateOnlineById(req.user._id, false)
     req.logOut()
     res.redirect('/')
 })

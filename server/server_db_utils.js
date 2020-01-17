@@ -41,7 +41,7 @@ getAllUsers = async function() {
 }
 
 getAllProsumers = async function() {
-    return await Model.User.find({isManager: false}).exec()
+    return await Model.User.find({isManager: false}, {password: 0}).exec()
 }
 
 getAllManagers = async function() {
@@ -78,6 +78,10 @@ updateBalanceById = async function(id, new_balance){
 
 updateOnOffById = async function (id, production_on_off) {
     return await Model.User.findOneAndUpdate({"_id": id}, {"production_on_off": production_on_off}).exec()
+}
+
+deleteUserById = async function (id){
+    return await Model.User.findOneAndDelete({"_id":id}).exec()
 }
 
 updateUserPasswordById = async function (id, password) {
@@ -122,6 +126,10 @@ registerNewUser = async function(name, email, hashed_password, isManager, buffer
     return user
 }
 
+updateOnlineById = async function (id, new_state) {
+    return await Model.User.findOneAndUpdate({"_id": id}, {"is_online": new_state}).exec()
+}
+
 module.exports = {
     updateConsumptionById: updateConsumptionById,
     getAllProsumers: getAllProsumers,
@@ -136,12 +144,14 @@ module.exports = {
     getAllManagers: getAllManagers,
     getAllUsers: getAllUsers,
     updateOnOffById: updateOnOffById,
+    updateOnlineById: updateOnlineById,
+    deleteUserById: deleteUserById,
     model: Model,
     uploadUserImage: uploadUserImage,
-    retriveUserHouseImage, retriveUserHouseImage,
-    updateUserPasswordById, updateUserPasswordById,
-    addToManagerBufferById, addToManagerBufferById,
-    takeFromManagerBufferById, takeFromManagerBufferById,
-    setProsumerBlackoutFlag, setProsumerBlackoutFlag,
-    removeProsumerBlackoutFlag, removeProsumerBlackoutFlag
+    retriveUserHouseImage: retriveUserHouseImage,
+    updateUserPasswordById: updateUserPasswordById,
+    addToManagerBufferById: addToManagerBufferById,
+    takeFromManagerBufferById: takeFromManagerBufferById,
+    setProsumerBlackoutFlag: setProsumerBlackoutFlag,
+    removeProsumerBlackoutFlag: removeProsumerBlackoutFlag
 }

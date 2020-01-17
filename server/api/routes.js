@@ -109,8 +109,23 @@ router.ws('/dashboard', function (ws, req) {
                 })
             })
         }
+        if (msg === 'request_prosumer_list_data'){
+            server_db_utils.getAllProsumers().then((prosumers) => {
+                ws.send("pn" + JSON.stringify(prosumers))
+            })
+        }
     });
 });
+
+//Delete user
+router.delete('/manager/delete_user/:id', async (req, res) => {
+    try{
+        await server_db_utils.deleteUserById(req.params.id)
+        res.status(204).send()
+    } catch(err) {
+        res.status(500).send({message: err.message})
+    }
+})
 
 router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, res, next){
     server_db_utils.uploadUserImage(req.file.path, req.user._id).then(() => {
