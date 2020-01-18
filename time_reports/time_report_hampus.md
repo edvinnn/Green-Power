@@ -33,4 +33,10 @@
 | 2019-12-21  | 2       | Finished the price panel of manager dashboard. (Set new market price and earnings) |
 | 2020-01-09  | 6       | Manager production panel almost finished. Introduced start/stop production for manager. |
 | 2020-01-10  | 2       | Finished production panel of manager dashboard. Now buffer is updated for managers aswell as for prosumers. |
+| 2020-01-13  | 3       | Initial backend of providing live prosumer data to the manager prosumer list. Report work. |
+| 2020-01-14  | 4       | Continuing work on prosumers list backend and frontend, finished to provide prosumers list with live data from prosumers. Report work |
+| 2020-01-15  | 1       | Report work |
+| 2020-01-16  | 8       | Sending requests from prosumers list in order to delete prosumers. Bug fixes and report work. |
+| 2020-01-17  | 8       | Finished prosumers list. Cleanup and bug fixes of low priority project tasks. Report work. |
+| 2020-01-18  | 7       | Report work and finishing up the project. |
 
