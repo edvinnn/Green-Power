@@ -138,64 +138,23 @@ router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, r
     });
 });
 
-//CONSUMPTION
-//Update prosumer consumption by id
-router.put('/prosumer/:id/consumption', async (req, res) => {
-
-    try{
-        const prosumer = await server_db_utils.updateConsumptionById(req.params.id, req.body.consumption)
-        if (prosumer == null) {
-            res.status(404).send()
-        } else {
-            res.status(204).send()
-        }
-    } catch(err) {
-        res.status(500).send({message: err.message})
-    }
-})
-
 // Returns the total of all prosumers consumption
 router.get('/prosumer/consumption', async (req, res) => {
-    try {
-        const prosumers = await server_db_utils.getAllProsumers()
-        
-        let total_consumption = 0
+    if(req.user.isManager){
+        try {
+            const prosumers = await server_db_utils.getAllProsumers()
 
-        prosumers.forEach(element => {
-            total_consumption += element.consumption
-        });
-        res.status(200).json(total_consumption)
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-})
+            let total_consumption = 0
 
-// Get prosumer consumption by id
-router.get('/prosumer/:id/consumption', async (req, res) => {
-    try {
-        const prosumer = await server_db_utils.getUserById(req.params.id)
-        if(prosumer == null){
-            res.status(404).send()
-        } else{
-            res.status(200).json(prosumer.consumption)
+            prosumers.forEach(element => {
+                total_consumption += element.consumption
+            });
+            res.status(200).json(total_consumption)
+        } catch (err) {
+            res.status(500).json({message: err.message})
         }
-    } catch(err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
-// PRODUCTION
-// Update prosumer production by id
-router.put('/prosumer/:id/production', async (req, res) => {
-    try{
-        const prosumer = await server_db_utils.updateProductionById(req.params.id, req.body.production)
-        if (prosumer == null) {
-            res.status(404).send()
-        } else {
-            res.status(204).send()
-        }
-    } catch(err) {
-        res.status(500).send({message: err.message})
+    } else {
+        res.status(403).send({message: "Unauthorized."})
     }
 })
 
@@ -215,20 +174,7 @@ router.get('/prosumer/production', async (req, res) => {
     }
 })
 
-// Get prosumer production by id
-router.get('/prosumer/:id/production', async (req, res) => {
-    try {
-        const prosumer = await server_db_utils.getUserById(req.params.id)
-        if (prosumer == null) {
-            res.status(404).send()
-        } else{
-            res.status(200).json(prosumer.production)
-        }
-    } catch(err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
+// Block prosumer from selling to the market
 router.put('/manager/block_user/:id/:value', async (req, res) => {
     if(req.user.isManager){
         try {
@@ -248,38 +194,8 @@ router.put('/manager/block_user/:id/:value', async (req, res) => {
     }
 })
 
-// NET PRODUCTION
-// Get prosumer net production by id
-router.get('/prosumer/:id/net_production', async(req, res) => {
-    try {
-        const prosumer = await server_db_utils.getUserById(req.params.id)
-        if(prosumer == null){
-            res.status(404).send()
-        } else{
-            const net_production = prosumer.production - prosumer.consumption
-            res.status(200).json(net_production)
-        }
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
 // SELL AND BUY RATIO
 router.put('/prosumer/:id/sell_ratio/:ratio', checkAuth, async(req, res) => {
-    if(req.user._id == req.params.id){
-        try {
-            server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
-                res.status(200).send()
-            });
-        } catch (err) {
-            res.status(500).json({message: "Serverside error."})
-        };
-    } else {
-        res.status(403).json({message: "Forbidden."})
-    }
-});
-
-router.put('/manager/:id/effect_value/:ratio', checkAuth, async(req, res) => {
     if(req.user._id == req.params.id){
         try {
             server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
@@ -302,6 +218,21 @@ router.put('/prosumer/:id/buy_ratio/:ratio', checkAuth, async(req, res) => {
         } catch (err) {
             res.status(500).json({message: "Serverside error."})
         }
+    } else {
+        res.status(403).json({message: "Forbidden."})
+    }
+});
+
+// Production effect power plant
+router.put('/manager/:id/effect_value/:ratio', checkAuth, async(req, res) => {
+    if(req.user._id == req.params.id){
+        try {
+            server_db_utils.updateOverProductionById(req.params.id, req.params.ratio).then(() => {
+                res.status(200).send()
+            });
+        } catch (err) {
+            res.status(500).json({message: "Serverside error."})
+        };
     } else {
         res.status(403).json({message: "Forbidden."})
     }
@@ -414,64 +345,6 @@ router.put('/manager/:id/new_price/:price', checkAuth, async(req, res) => {
     }
 });
 
-
-// BUFFER
-// Get prosumer buffer by id
-router.get('/prosumer/:id/buffer', async (req, res) => {
-    try {
-        const prosumer = await server_db_utils.getUserById(req.params.id)
-        if(prosumer == null){
-            res.status(404).send()
-        } else{
-            res.status(200).json(prosumer.buffer)
-        }
-    } catch(err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
-// Update prosumer buffer by id
-router.put('/prosumer/:id/buffer', async (req, res) => {
-    const prosumer = await server_db_utils.updateBufferById(req.params.id, req.body.buffer)
-    try{
-        if(prosumer == null){
-            res.status(404).send()
-        } else{
-            res.status(204).send()
-        }
-    } catch(err) {
-        res.status(500).send({message: err.message})
-    }
-})
-
-// Get prosumer max buffer by id
-router.get('/prosumer/:id/buffer_max', async (req, res) => {
-    try {
-        const prosumer = await server_db_utils.getUserById(req.params.id)
-        if(prosumer == null){
-            res.status(404).send()
-        } else {
-            res.status(200).json(prosumer.buffer_max)
-        }
-    } catch(err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
-// Update prosumer max buffer by id
-router.put('/prosumer/:id/buffer_max', async (req, res) => {
-    try{
-        const prosumer = await server_db_utils.updateBufferSizeById(req.params.id, req.body.buffer_max)
-        if (prosumer == null) {
-            res.status(404).send()
-        } else {
-            res.status(204).send()
-        }
-    } catch(err) {
-        res.status(500).send({message: err.message})
-    }
-})
-
 // CHANGE USER INFO
 router.post('/prosumer/change_name', async (req, res) => {
     if(!req.isAuthenticated()) {
@@ -554,12 +427,16 @@ router.get('/wind/latest', async (req, res) => {
 
 // Create new wind
 router.post('/wind', async (req, res) => {
-    try {
-        await sim_db_utils.updateWind(req.body.wind)
-        const wind = await sim_db_utils.getLatestWind()
-        res.status(201).json(wind)
-    } catch (err) {
-        res.status(400).json({message: err.message})
+    if(req.user.isManager){
+        try {
+            await sim_db_utils.updateWind(req.body.wind)
+            const wind = await sim_db_utils.getLatestWind()
+            res.status(201).json(wind)
+        } catch (err) {
+            res.status(400).json({message: err.message})
+        }
+    } else {
+        res.status(403).send()
     }
 })
 
@@ -587,12 +464,16 @@ router.get('/consumer/consumption/latest',async (req, res) => {
 
 // Create new consumption
 router.post('/consumer/consumption', async (req, res) => {
-    try {
-        await sim_db_utils.updateConsumption(req.body.consumption)
-        const consumption = await sim_db_utils.getLatestConsumption()
-        res.status(201).json(consumption)
-    } catch (err) {
-        res.status(400).json({message: err.message})
+    if(req.user.isManager){
+        try {
+            await sim_db_utils.updateConsumption(req.body.consumption)
+            const consumption = await sim_db_utils.getLatestConsumption()
+            res.status(201).json(consumption)
+        } catch (err) {
+            res.status(400).json({message: err.message})
+        }
+    } else{
+        res.status(403).send()
     }
 })
 
@@ -631,13 +512,6 @@ function checkAuth(req, res, next) {
         return next()
     }
     res.redirect('/login')
-}
-
-function checkNotAuth(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
 }
 
 module.exports = router

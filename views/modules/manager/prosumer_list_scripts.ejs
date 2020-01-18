@@ -41,10 +41,13 @@
                 }
                 let button = document.createElement("button")
                 button.innerHTML = "Block User"
+                button.setAttribute("class", "btn btn-primary")
                 if(prosumer.isBlocked){
-                    button.setAttribute("class", "btn btn-secondary")
+                    button.disabled = true
                 } else{
-                    button.setAttribute("class", "btn btn-primary")
+                    if (button.disabled){
+                        button.removeAttribute("disabled")
+                    }
                 }
                 new_row.insertCell(7).appendChild(button)
                 button.addEventListener("click", function () {
@@ -54,9 +57,13 @@
                             url: '<%= api %>/manager/block_user/' + prosumer._id + '/' + prompt_value,
                             type: 'PUT',
                             success: function () {
+                                button.disabled = true
                             }
                         });
-                    } else{
+                    } else if (prompt_value == null){
+                        return
+                    }
+                    else{
                         alert(prompt_value + " is not an eligible number, the value should be written in numerical form from 10-100 only (e.g. [10] or [100]).")
                     }
 
