@@ -132,6 +132,20 @@ router.delete('/manager/delete_user/:id', async (req, res) => {
     }
 })
 
+router.post('/prosumer/delete_account/:id', async (req, res) => {
+    if(req.user._id == req.params.id){
+        try{
+            await server_db_utils.deleteUserById(req.user._id)
+            req.logout()
+            res.redirect('/login')
+        } catch(err) {
+            res.status(500).send({message: err.message})
+        }
+    } else {
+        res.status(403).send({message: "Unauthorized."})
+    }
+})
+
 router.post('/upload_photo', checkAuth, upload.single('avatar'), function(req, res, next){
     server_db_utils.uploadUserImage(req.file.path, req.user._id).then(() => {
         return res.status(200).redirect('/profile')
