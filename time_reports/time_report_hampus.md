@@ -21,3 +21,22 @@
 | 2019-12-02  | 7       | Introduced balance and updated buffer simulator with selling and buying variables. | 
 | 2019-12-03  | 3       | Been testing different approaches of showing charts on dashboard. |
 | 2019-12-04  | 6       | Work progress on prosumer dashboard. Built a model for the dashboard which also provides values from the API . |
+| 2019-12-05  | 7       | Prosumer dashboard update: sliders that provides functionality to update sell and buy ratio. Did some debugging aswell. |
+| 2019-12-09  | 5       | Improvements to simulator. Fixed bugs in buffer (selling and buying). |
+| 2019-12-10  | 3       | Initialized a manager user and simulator for coal power plant. |
+| 2019-12-11  | 5       | Bugfixes on buffer simulator and made prosumers and managers into one model (user) with an extra field that indicates if manager or not. Some refactoring of the code. |
+| 2019-12-12  | 4       | Progress on manager website, introduced prosumer list. |
+| 2019-12-15  | 3       | Finished a model of the manager website frontend. |
+| 2019-12-16  | 4       | Some changes to the manager dashboard and bugfixes of simulator buffer. |
+| 2019-12-18  | 4       | Set up issues for manager website backend. Finished the demand section of the manager dashboard backend. Also solved a small bug. |
+| 2019-12-19  | 3       | Fixed some conflicts and started on the price panel of manager dashboard. |
+| 2019-12-21  | 2       | Finished the price panel of manager dashboard. (Set new market price and earnings) |
+| 2020-01-09  | 6       | Manager production panel almost finished. Introduced start/stop production for manager. |
+| 2020-01-10  | 2       | Finished production panel of manager dashboard. Now buffer is updated for managers aswell as for prosumers. |
+| 2020-01-13  | 3       | Initial backend of providing live prosumer data to the manager prosumer list. Report work. |
+| 2020-01-14  | 4       | Continuing work on prosumers list backend and frontend, finished to provide prosumers list with live data from prosumers. Report work |
+| 2020-01-15  | 1       | Report work |
+| 2020-01-16  | 8       | Sending requests from prosumers list in order to delete prosumers. Bug fixes and report work. |
+| 2020-01-17  | 8       | Finished prosumers list. Cleanup and bug fixes of low priority project tasks. Report work. |
+| 2020-01-18  | 7       | Report work and finishing up the project. |
+
